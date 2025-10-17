@@ -185,30 +185,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DADOS DAS BUILDS ---
     const buildData = {
-        'fogo': {
+        'medico': {
             'agua': {
                 jutsuOrder: [
-                    { level: 10, name: { 'pt-BR': "Jutsu Bola de Fogo", 'en': "Fire Ball Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia", 'en': "Academy Mission" } }, { level: 20, name: { 'pt-BR': "Jutsu Prisão de Água", 'en': "Water Prison Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia (Água)", 'en': "Academy Mission (Water)" } }, { level: 25, name: { 'pt-BR': "Grande Aniquilação de Fogo", 'en': "Great Fire Annihilation" }, howToGet: { 'pt-BR': "NPC Mestre do Fogo", 'en': "Fire Master NPC" } }, { level: 35, name: { 'pt-BR': "Jutsu Dragão de Água", 'en': "Water Dragon Jutsu" }, howToGet: { 'pt-BR': "Pergaminho (Drop)", 'en': "Scroll (Drop)" } }, { level: 45, name: { 'pt-BR': "Jutsu Mar de Chamas", 'en': "Sea of Flames Jutsu" }, howToGet: { 'pt-BR': "Missão Especial (Fogo)", 'en': "Special Mission (Fire)" } }, { level: 55, name: { 'pt-BR': "Grande Onda de Choque Aquática", 'en': "Great Water Shockwave" }, howToGet: { 'pt-BR': "Missão Especial (Água)", 'en': "Special Mission (Water)" } },
+                    { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                    { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                    { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                    { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                    { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                    { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                    { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                    { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Med Corp" } },
+                    { level: 30, name: { 'pt-BR': "Sticky Venom", 'en': "Sticky Venom" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
                 ],
                 items: {
-                    'Weapon': { name: { 'pt-BR': "Leque de Batalha", 'en': "Battle Fan" }, dmg: "Variável", attr: "+12 Intelecto", effect: { 'pt-BR': "Aumenta dano elemental em 3%", 'en': "Increases elemental damage by 3%" }, obs: { 'pt-BR': "Ideal para ninjas que usam múltiplos elementos.", 'en': "Ideal for ninjas who use multiple elements." } }, 'Clothing': { name: { 'pt-BR': "Manto do Kage", 'en': "Kage Cloak" }, dmg: "N/A", attr: "+15 Chakra, +5 Fortitude", effect: { 'pt-BR': "Redução de Dano +5%", 'en': "Damage Reduction +5%" }, obs: { 'pt-BR': "Equilíbrio entre poder ofensivo e defesa.", 'en': "Balance between offensive power and defense." } }, 'Accessory': { name: { 'pt-BR': "Colar do Sábio dos Seis Caminhos", 'en': "Sage of Six Paths Necklace" }, dmg: "N/A", attr: "+8 Intelecto, +8 Chakra", effect: "N/A", obs: { 'pt-BR': "Melhor acessório para maximizar o dano de ninjutsu.", 'en': "Best accessory to maximize ninjutsu damage." } }
+                    'Weapon': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
+                    'Clothing': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
+                    'Accessory': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } }
                 },
-                otherBonuses: { str: 0, sta: 5, intel: 20, agi: 0, chakra: 23 },
-                focuses: { 'Intelecto': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 15, chakra: 10, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 25, chakra: 15, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 40, chakra: 15, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 50, chakra: 25, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 60, chakra: 35, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 70, chakra: 45, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 80, chakra: 55, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 90, chakra: 60, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 100, chakra: 70, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 100, chakra: 80, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 100, chakra: 85, sta: 65 }, ] }
+                focuses: {
+                    'Intelecto': [
+                        { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
+                        { level: 10, str: 5, sta: 21, intel: 25, agi: 5, chakra: 14 },
+                        { level: 20, str: 5, sta: 27, intel: 40, agi: 5, chakra: 43 },
+                        { level: 30, str: 5, sta: 39, intel: 60, agi: 5, chakra: 61 },
+                        { level: 40, str: 5, sta: 67, intel: 82, agi: 5, chakra: 61 },
+                        { level: 50, str: 5, sta: 113, intel: 86, agi: 5, chakra: 61 },
+                        { level: 60, str: 5, sta: 148, intel: 91, agi: 5, chakra: 61 }
+                    ],
+                    'Chakra': [
+                        { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
+                        { level: 10, str: 5, agi: 5, intel: 25, chakra: 14, sta: 21 },
+                        { level: 20, str: 5, agi: 5, intel: 35, chakra: 36, sta: 39 },
+                        { level: 30, str: 5, agi: 5, intel: 40, chakra: 61, sta: 59 },
+                        { level: 40, str: 5, agi: 5, intel: 40, chakra: 87, sta: 83 },
+                        { level: 50, str: 5, agi: 5, intel: 50, chakra: 105, sta: 105 },
+                        { level: 60, str: 5, agi: 5, intel: 65, chakra: 122, sta: 113 }
+                    ]
+                }
             }
-        },
-        'agua': {
-            'medico': {
-                jutsuOrder: [
-                    { level: 10, name: { 'pt-BR': "Jutsu Prisão de Água", 'en': "Water Prison Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia", 'en': "Academy Mission" } }, { level: 15, name: { 'pt-BR': "Palma Mística (Cura Básica)", 'en': "Mystical Palm (Basic Heal)" }, howToGet: { 'pt-BR': "NPC Mestre Médico", 'en': "Medical Master NPC" } }, { level: 30, name: { 'pt-BR': "Jutsu Dragão de Água", 'en': "Water Dragon Jutsu" }, howToGet: { 'pt-BR': "Pergaminho (Drop)", 'en': "Scroll (Drop)" } }, { level: 40, name: { 'pt-BR': "Cura Avançada em Área", 'en': "Advanced Area Heal" }, howToGet: { 'pt-BR': "NPC Mestre Médico", 'en': "Medical Master NPC" } }, { level: 50, name: { 'pt-BR': "Grande Onda de Choque Aquática", 'en': "Great Water Shockwave" }, howToGet: { 'pt-BR': "Missão Especial", 'en': "Special Mission" } }, { level: 60, name: { 'pt-BR': "Técnica de Regeneração Celular", 'en': "Cell Regeneration Technique" }, howToGet: { 'pt-BR': "Missão Lendária", 'en': "Legendary Mission" } },
-                ],
-                items: {
-                    'Weapon': { name: { 'pt-BR': "Tanto Medicinal", 'en': "Medicinal Tanto" }, dmg: "N/A", attr: "+10 Intelecto", effect: { 'pt-BR': "Poder de Cura +5%", 'en': "Healing Power +5%" }, obs: { 'pt-BR': "Aumenta o poder dos jutsus médicos.", 'en': "Increases the power of medical jutsus." } }, 'Clothing': { name: { 'pt-BR': "Vestes de Sábio", 'en': "Sage Robes" }, dmg: "N/A", attr: "+10 Chakra", effect: { 'pt-BR': "Redução de Custo de Chakra -5%", 'en': "Chakra Cost Reduction -5%" }, obs: { 'pt-BR': "Oferece mais recursos para jutsus.", 'en': "Provides more resources for jutsus." } }, 'Accessory': { name: { 'pt-BR': "Amuleto da Sabedoria", 'en': "Amulet of Wisdom" }, dmg: "N/A", attr: "+5 Intelecto, +5 Chakra", effect: "N/A", obs: { 'pt-BR': "Aumenta a sobrevivência e o poder.", 'en': "Increases survivability and power." } }
-                },
-                otherBonuses: { str: 0, sta: 5, intel: 10, agi: 0, chakra: 5 },
-                focuses: { 'Intelecto': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 15, chakra: 10, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 25, chakra: 15, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 35, chakra: 20, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 45, chakra: 25, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 55, chakra: 35, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 65, chakra: 40, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 75, chakra: 50, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 85, chakra: 55, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 100, chakra: 60, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 100, chakra: 70, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 100, chakra: 80, sta: 65 }, ], 'Chakra': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 10, chakra: 15, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 15, chakra: 25, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 20, chakra: 35, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 25, chakra: 45, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 35, chakra: 55, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 40, chakra: 65, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 50, chakra: 75, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 55, chakra: 85, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 60, chakra: 100, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 70, chakra: 100, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 80, chakra: 100, sta: 65 }, ] }
-            }
-        },
+        }
     };
 
     // --- LÓGICA DA PÁGINA ---
@@ -400,11 +426,11 @@ document.addEventListener('DOMContentLoaded', () => {
     focusSelect.addEventListener('change', () => {
         const selectedFocus = focusSelect.value;
         if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
-            renderAttributes(currentDisplayedBuild.focuses[selectedFocus], currentDisplayedBuild.otherBonuses);
+            renderAttributes(currentDisplayedBuild.focuses[selectedFocus]);
         }
     });
     
-    function renderAttributes(attributesArray, otherBonuses = { str: 0, sta: 0, intel: 0, agi: 0, chakra: 0 }) {
+    function renderAttributes(attributesArray) {
         attributesTableBody.innerHTML = '';
         attributesTableFoot.innerHTML = '';
         
@@ -416,8 +442,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if(attributesArray.length > 0) {
             const finalStats = attributesArray[attributesArray.length - 1];
             const guildBonus = { str: Math.floor(finalStats.str * 0.1), sta: Math.floor(finalStats.sta * 0.1), intel: Math.floor(finalStats.intel * 0.1), agi: Math.floor(finalStats.agi * 0.1), chakra: Math.floor(finalStats.chakra * 0.1), };
-            const totalStats = { str: finalStats.str + guildBonus.str + otherBonuses.str, sta: finalStats.sta + guildBonus.sta + otherBonuses.sta, intel: finalStats.intel + guildBonus.intel + otherBonuses.intel, agi: finalStats.agi + guildBonus.agi + otherBonuses.agi, chakra: finalStats.chakra + guildBonus.chakra + otherBonuses.chakra, };
-            const bonusRows = `<tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.guildBonus}</td><td>+${guildBonus.str}</td><td>+${guildBonus.sta}</td><td>+${guildBonus.intel}</td><td>+${guildBonus.agi}</td><td>+${guildBonus.chakra}</td></tr><tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.otherBonuses}</td><td>+${otherBonuses.str}</td><td>+${otherBonuses.sta}</td><td>+${otherBonuses.intel}</td><td>+${otherBonuses.agi}</td><td>+${otherBonuses.chakra}</td></tr><tr class="bg-slate-700"><td class="p-3 text-base text-slate-100 font-bold text-left">${langStrings.totalLevel.replace('{level}', finalStats.level)}</td><td class="font-bold text-lg">${totalStats.str}</td><td class="font-bold text-lg">${totalStats.sta}</td><td class="font-bold text-lg">${totalStats.intel}</td><td class="font-bold text-lg">${totalStats.agi}</td><td class="font-bold text-lg">${totalStats.chakra}</td></tr>`;
+            const totalStats = { 
+                str: finalStats.str + guildBonus.str, 
+                sta: finalStats.sta + guildBonus.sta, 
+                intel: finalStats.intel + guildBonus.intel, 
+                agi: finalStats.agi + guildBonus.agi, 
+                chakra: finalStats.chakra + guildBonus.chakra, 
+            };
+            const bonusRows = `<tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.guildBonus}</td><td>+${guildBonus.str}</td><td>+${guildBonus.sta}</td><td>+${guildBonus.intel}</td><td>+${guildBonus.agi}</td><td>+${guildBonus.chakra}</td></tr><tr class="bg-slate-700"><td class="p-3 text-base text-slate-100 font-bold text-left">${langStrings.totalLevel.replace('{level}', finalStats.level)}</td><td class="font-bold text-lg">${totalStats.str}</td><td class="font-bold text-lg">${totalStats.sta}</td><td class="font-bold text-lg">${totalStats.intel}</td><td class="font-bold text-lg">${totalStats.agi}</td><td class="font-bold text-lg">${totalStats.chakra}</td></tr>`;
             attributesTableFoot.innerHTML = bonusRows;
         }
     }
@@ -434,10 +466,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 option.textContent = langStrings[`focus${focusName}`] || focusName;
                 focusSelect.appendChild(option);
             });
-            renderAttributes(build.focuses[focusOptions[0]], build.otherBonuses);
+            renderAttributes(build.focuses[focusOptions[0]]);
         } else {
             focusContainer.classList.add('hidden');
-            renderAttributes(build.focuses[Object.keys(build.focuses)[0]], build.otherBonuses);
+            renderAttributes(build.focuses[Object.keys(build.focuses)[0]]);
         }
 
         jutsuTableBody.innerHTML = '';
@@ -501,6 +533,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-
 
 
