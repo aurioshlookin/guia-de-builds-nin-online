@@ -101,9 +101,17 @@
             <section id="attributes-section">
                 <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="attributesTitle">Atributos Recomendados</h2>
                 
-                <div id="attribute-focus-container" class="hidden items-center mb-4">
-                    <label for="attribute-focus-select" class="text-sm font-medium text-slate-300 mr-4" data-translate-key="focusLabel">Foco da Build:</label>
-                    <select id="attribute-focus-select" class="w-52 bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                <div class="flex flex-wrap items-center justify-between mb-4">
+                    <div id="attribute-focus-container" class="hidden items-center">
+                        <label for="attribute-focus-select" class="text-sm font-medium text-slate-300 mr-4" data-translate-key="focusLabel">Foco da Build:</label>
+                        <select id="attribute-focus-select" class="w-52 bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                    </div>
+                    <div class="flex items-center space-x-2 mt-2 md:mt-0" id="guild-bonus-container" class="hidden">
+                         <input type="checkbox" id="guild-bonus-toggle" class="h-4 w-4 rounded bg-slate-700 border-slate-600 text-orange-600 focus:ring-orange-500" checked>
+                        <label for="guild-bonus-toggle" id="guild-bonus-legend" class="text-sm text-orange-400 cursor-pointer">
+                            <span data-translate-key="guildBonusLegend"></span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -116,10 +124,12 @@
                                 <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thIntellect">Intelecto</th>
                                 <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thAgility">Agilidade</th>
                                 <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thChakra">Chakra</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thHealth">Vida</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thChakraPool">Chakra</th>
                             </tr>
                         </thead>
                         <tbody id="attributes-table-body" class="divide-y divide-slate-700"></tbody>
-                        <tfoot id="attributes-table-foot" class="border-t-2 border-slate-700"></tfoot>
+                        
                     </table>
                 </div>
             </section>
@@ -173,65 +183,91 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE TRADUÇÃO ---
     const translations = {
         'pt-BR': {
-            pageTitle: "Nin Online - Guia de Builds", headerTitle: "Guia de Builds - Nin Online", headerSubtitle: "Encontre a build recomendada para sua combinação de maestrias.", mastery1Label: "Maestria Principal", mastery2Label: "Maestria Secundária", findBuildBtn: "Buscar Build", attributesTitle: "Atributos Recomendados", focusLabel: "Foco da Build:", thLevel: "Nível", thStrength: "Força", thFortitude: "Fortitude", thIntellect: "Intelecto", thAgility: "Agilidade", thChakra: "Chakra", jutsuTitle: "Ordem de Jutsus Sugerida", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "Como Obter", itemsTitle: "Itens Recomendados", thType: "Tipo", thRecommendedItem: "Item Recomendado", thDamage: "Dano", thAttribute: "Atributo", thEffect: "Efeito", thObservation: "Observação", feedbackSelectMastery: "Por favor, selecione pelo menos a maestria principal.", feedbackNotFoundMastery: "Nenhuma build foi encontrada para a maestria: {m1}.", feedbackNotFoundCombination: "Nenhuma build foi encontrada para a combinação: {m1} + {m2}.", guildBonus: "Bônus de Guilda (10%)", otherBonuses: "Outros Bônus", totalLevel: "Total (Nível {level})", slotExtra: "Extra {num}", slotEmpty: "Vazio", focusIntellect: "Intelecto", focusChakra: "Chakra", masteryNames: { none: 'Nenhuma', fogo: 'Fogo', agua: 'Água', bolha: 'Bolha (Água)', terra: 'Terra', raio: 'Raio', vento: 'Vento', leque: 'Leque (Vento)', medico: 'Médico', arma: 'Arma', taijutsu: 'Taijutsu', punho_gentil: 'Punho Gentil (Taijutsu)' }, itemTypes: { Weapon: 'Arma', Clothing: 'Roupa', Accessory: 'Acessório' }
+            pageTitle: "Nin Online - Guia de Builds", headerTitle: "Guia de Builds - Nin Online", headerSubtitle: "Encontre a build recomendada para sua combinação de maestrias.", mastery1Label: "Maestria Principal", mastery2Label: "Maestria Secundária", findBuildBtn: "Buscar Build", attributesTitle: "Atributos Recomendados", focusLabel: "Foco da Build:", thLevel: "Nível", thStrength: "Força", thFortitude: "Fortitude", thIntellect: "Intelecto", thAgility: "Agilidade", thChakra: "Chakra", thHealth: "Vida", thChakraPool: "Chakra", jutsuTitle: "Ordem de Jutsus Sugerida", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "Como Obter", itemsTitle: "Itens Recomendados", thType: "Tipo", thRecommendedItem: "Item Recomendado", thDamage: "Dano", thAttribute: "Atributo", thEffect: "Efeito", thObservation: "Observação", feedbackSelectMastery: "Por favor, selecione pelo menos a maestria principal.", feedbackNotFoundMastery: "Nenhuma build foi encontrada para a maestria: {m1}.", feedbackNotFoundCombination: "Nenhuma build foi encontrada para a combinação: {m1} + {m2}.", guildBonus: "Bônus de Guilda (10%)", otherBonuses: "Outros Bônus", totalLevel: "Total (Nível {level})", slotExtra: "Extra {num}", slotEmpty: "Vazio", focusIntellect: "Intelecto", focusChakra: "Chakra", guildBonusLegend: "Bônus de Guilda (10%)", masteryNames: { none: 'Nenhuma', fogo: 'Fogo', agua: 'Água', bolha: 'Bolha (Água)', terra: 'Terra', raio: 'Raio', vento: 'Vento', leque: 'Leque (Vento)', medico: 'Médico', arma: 'Arma', taijutsu: 'Taijutsu', punho_gentil: 'Punho Gentil (Taijutsu)' }, itemTypes: { Weapon: 'Arma', Clothing: 'Roupa', Accessory: 'Acessório' }
         },
         'en': {
-            pageTitle: "Nin Online - Build Guide", headerTitle: "Nin Online Build Guide", headerSubtitle: "Find the recommended build for your mastery combination.", mastery1Label: "Main Mastery", mastery2Label: "Secondary Mastery", findBuildBtn: "Find Build", attributesTitle: "Recommended Attributes", focusLabel: "Build Focus:", thLevel: "Level", thStrength: "Strength", thFortitude: "Fortitude", thIntellect: "Intellect", thAgility: "Agility", thChakra: "Chakra", jutsuTitle: "Suggested Jutsu Order", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "How to Get", itemsTitle: "Recommended Items", thType: "Type", thRecommendedItem: "Recommended Item", thDamage: "Damage", thAttribute: "Attribute", thEffect: "Effect", thObservation: "Observation", feedbackSelectMastery: "Please select at least the main mastery.", feedbackNotFoundMastery: "No build was found for the mastery: {m1}.", feedbackNotFoundCombination: "No build was found for the combination: {m1} + {m2}.", guildBonus: "Guild Bonus (10%)", otherBonuses: "Other Bonuses", totalLevel: "Total (Level {level})", slotExtra: "Extra {num}", slotEmpty: "Empty", focusIntellect: "Intellect", focusChakra: "Chakra", masteryNames: { none: 'None', fogo: 'Fire', agua: 'Water', bolha: 'Bubble (Water)', terra: 'Earth', raio: 'Lightning', vento: 'Wind', leque: 'Fan (Wind)', medico: 'Medical', arma: 'Weapon', taijutsu: 'Taijutsu', punho_gentil: 'Gentle Fist (Taijutsu)' }, itemTypes: { Weapon: 'Weapon', Clothing: 'Clothing', Accessory: 'Accessory' }
+            pageTitle: "Nin Online - Build Guide", headerTitle: "Nin Online Build Guide", headerSubtitle: "Find the recommended build for your mastery combination.", mastery1Label: "Main Mastery", mastery2Label: "Secondary Mastery", findBuildBtn: "Find Build", attributesTitle: "Recommended Attributes", focusLabel: "Build Focus:", thLevel: "Level", thStrength: "Strength", thFortitude: "Fortitude", thIntellect: "Intellect", thAgility: "Agility", thChakra: "Chakra", thHealth: "Health", thChakraPool: "Chakra Pool", jutsuTitle: "Suggested Jutsu Order", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "How to Get", itemsTitle: "Recommended Items", thType: "Type", thRecommendedItem: "Recommended Item", thDamage: "Damage", thAttribute: "Attribute", thEffect: "Effect", thObservation: "Observation", feedbackSelectMastery: "Please select at least the main mastery.", feedbackNotFoundMastery: "No build was found for the mastery: {m1}.", feedbackNotFoundCombination: "No build was found for the combination: {m1} + {m2}.", guildBonus: "Guild Bonus (10%)", otherBonuses: "Other Bonuses", totalLevel: "Total (Level {level})", slotExtra: "Extra {num}", slotEmpty: "Empty", focusIntellect: "Intellect", focusChakra: "Chakra", guildBonusLegend: "Guild Bonus (10%)", masteryNames: { none: 'None', fogo: 'Fire', agua: 'Water', bolha: 'Bubble (Water)', terra: 'Earth', raio: 'Lightning', vento: 'Wind', leque: 'Fan (Wind)', medico: 'Medical', arma: 'Weapon', taijutsu: 'Taijutsu', punho_gentil: 'Gentle Fist (Taijutsu)' }, itemTypes: { Weapon: 'Weapon', Clothing: 'Clothing', Accessory: 'Accessory' }
         }
     };
 
     let currentLang;
     let langStrings;
+    let isGuildBonusActive = true;
 
     // --- DADOS DAS BUILDS ---
     const buildData = {
         'medico': {
             'agua': {
-                jutsuOrder: [
-                    { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                    { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                    { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                    { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                    { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                    { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                    { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                    { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Med Corp" } },
-                    { level: 30, name: { 'pt-BR': "Sticky Venom", 'en': "Sticky Venom" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
-                ],
                 items: {
                     'Weapon': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
                     'Clothing': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
                     'Accessory': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } }
                 },
                 focuses: {
-                    'Intelecto': [
-                        { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
-                        { level: 10, str: 5, sta: 21, intel: 25, agi: 5, chakra: 14 },
-                        { level: 20, str: 5, sta: 27, intel: 40, agi: 5, chakra: 43 },
-                        { level: 30, str: 5, sta: 39, intel: 60, agi: 5, chakra: 61 },
-                        { level: 40, str: 5, sta: 67, intel: 82, agi: 5, chakra: 61 },
-                        { level: 50, str: 5, sta: 113, intel: 86, agi: 5, chakra: 61 },
-                        { level: 60, str: 5, sta: 148, intel: 91, agi: 5, chakra: 61 }
-                    ],
-                    'Chakra': [
-                        { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
-                        { level: 10, str: 5, agi: 5, intel: 25, chakra: 14, sta: 21 },
-                        { level: 20, str: 5, agi: 5, intel: 35, chakra: 36, sta: 39 },
-                        { level: 30, str: 5, agi: 5, intel: 40, chakra: 61, sta: 59 },
-                        { level: 40, str: 5, agi: 5, intel: 40, chakra: 87, sta: 83 },
-                        { level: 50, str: 5, agi: 5, intel: 50, chakra: 105, sta: 105 },
-                        { level: 60, str: 5, agi: 5, intel: 65, chakra: 122, sta: 113 }
-                    ]
+                    'intellect': {
+                        stats: [
+                            { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
+                            { level: 10, str: 5, sta: 21, intel: 25, agi: 5, chakra: 14 },
+                            { level: 20, str: 5, sta: 27, intel: 40, agi: 5, chakra: 43 },
+                            { level: 30, str: 5, sta: 39, intel: 60, agi: 5, chakra: 61 },
+                            { level: 40, str: 5, sta: 67, intel: 82, agi: 5, chakra: 61 },
+                            { level: 50, str: 5, sta: 113, intel: 86, agi: 5, chakra: 61 },
+                            { level: 60, str: 5, sta: 148, intel: 91, agi: 5, chakra: 61 }
+                        ],
+                        jutsuOrder: [
+                            { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                            { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                            { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Med Corp" } },
+                            { level: 30, name: { 'pt-BR': "Sticky Venom", 'en': "Sticky Venom" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
+                        ]
+                    },
+                    'chakra': {
+                        stats: [
+                            { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
+                            { level: 10, str: 5, agi: 5, intel: 25, chakra: 14, sta: 21 },
+                            { level: 20, str: 5, agi: 5, intel: 35, chakra: 36, sta: 39 },
+                            { level: 30, str: 5, agi: 5, intel: 40, chakra: 61, sta: 59 },
+                            { level: 40, str: 5, agi: 5, intel: 40, chakra: 87, sta: 83 },
+                            { level: 50, str: 5, agi: 5, intel: 50, chakra: 105, sta: 105 },
+                            { level: 60, str: 5, agi: 5, intel: 65, chakra: 122, sta: 113 }
+                        ],
+                        jutsuOrder: [
+                            { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                            { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
+                            { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
+                            { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
+                            { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
+                            { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Med Corp" } },
+                            { level: 20, name: { 'pt-BR': "Sensory", 'en': "Sensory" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
+                        ]
+                    }
                 }
             }
         }
@@ -243,14 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const findBuildBtn = document.getElementById('find-build-btn');
     const buildResultsDiv = document.getElementById('build-results');
     const feedbackMessageDiv = document.getElementById('feedback-message');
-    const attributesTableBody = document.getElementById('attributes-table-body');
-    const attributesTableFoot = document.getElementById('attributes-table-foot');
     const jutsuTableBody = document.getElementById('jutsu-table-body');
     const itemsTableBody = document.getElementById('items-table-body');
     const exclusiveMasteries = ['bolha', 'leque', 'punho_gentil'];
     let currentDisplayedBuild = null;
     const focusContainer = document.getElementById('attribute-focus-container');
     const focusSelect = document.getElementById('attribute-focus-select');
+    const guildBonusToggle = document.getElementById('guild-bonus-toggle');
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -426,55 +461,61 @@ document.addEventListener('DOMContentLoaded', () => {
     focusSelect.addEventListener('change', () => {
         const selectedFocus = focusSelect.value;
         if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
-            renderAttributes(currentDisplayedBuild.focuses[selectedFocus]);
+            const focusData = currentDisplayedBuild.focuses[selectedFocus];
+            renderAttributes(focusData.stats);
+            renderJutsus(focusData.jutsuOrder);
+        }
+    });
+
+    guildBonusToggle.addEventListener('change', () => {
+        isGuildBonusActive = guildBonusToggle.checked;
+        const selectedFocus = focusSelect.value;
+        if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
+            const focusData = currentDisplayedBuild.focuses[selectedFocus];
+            renderAttributes(focusData.stats);
         }
     });
     
     function renderAttributes(attributesArray) {
+        const attributesTableBody = document.getElementById('attributes-table-body');
         attributesTableBody.innerHTML = '';
-        attributesTableFoot.innerHTML = '';
         
         attributesArray.forEach(stat => {
-            const row = `<tr><td class="p-2 text-sm text-slate-300 font-bold text-left">${stat.level}</td><td class="p-2 text-sm text-slate-300">${stat.str}</td><td class="p-2 text-sm text-slate-300">${stat.sta}</td><td class="p-2 text-sm text-slate-300">${stat.intel}</td><td class="p-2 text-sm text-slate-300">${stat.agi}</td><td class="p-2 text-sm text-slate-300">${stat.chakra}</td></tr>`;
+            const strBonus = isGuildBonusActive ? Math.floor(stat.str * 0.1) : 0;
+            const staBonus = isGuildBonusActive ? Math.floor(stat.sta * 0.1) : 0;
+            const intelBonus = isGuildBonusActive ? Math.floor(stat.intel * 0.1) : 0;
+            const agiBonus = isGuildBonusActive ? Math.floor(stat.agi * 0.1) : 0;
+            const chakraBonus = isGuildBonusActive ? Math.floor(stat.chakra * 0.1) : 0;
+            
+            const staWithBonus = stat.sta + staBonus;
+            const chakraWithBonus = stat.chakra + chakraBonus;
+            const health = 250 + (staWithBonus - 5) * 8;
+            const chakraPool = 50 + (chakraWithBonus - 5) * 5;
+
+            const strBonusDisplay = isGuildBonusActive && strBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${strBonus})</span>` : '';
+            const staBonusDisplay = isGuildBonusActive && staBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${staBonus})</span>` : '';
+            const intelBonusDisplay = isGuildBonusActive && intelBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${intelBonus})</span>` : '';
+            const agiBonusDisplay = isGuildBonusActive && agiBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${agiBonus})</span>` : '';
+            const chakraBonusDisplay = isGuildBonusActive && chakraBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${chakraBonus})</span>` : '';
+
+            const row = `<tr>
+                <td class="p-2 text-sm text-slate-300 font-bold text-left">${stat.level}</td>
+                <td class="p-2 text-sm text-slate-300">${stat.str}${strBonusDisplay}</td>
+                <td class="p-2 text-sm text-slate-300">${stat.sta}${staBonusDisplay}</td>
+                <td class="p-2 text-sm text-slate-300">${stat.intel}${intelBonusDisplay}</td>
+                <td class="p-2 text-sm text-slate-300">${stat.agi}${agiBonusDisplay}</td>
+                <td class="p-2 text-sm text-slate-300">${stat.chakra}${chakraBonusDisplay}</td>
+                <td class="p-2 text-sm text-slate-300 font-semibold text-green-400">${health}</td>
+                <td class="p-2 text-sm text-slate-300 font-semibold text-blue-400">${chakraPool}</td>
+            </tr>`;
             attributesTableBody.innerHTML += row;
         });
-
-        if(attributesArray.length > 0) {
-            const finalStats = attributesArray[attributesArray.length - 1];
-            const guildBonus = { str: Math.floor(finalStats.str * 0.1), sta: Math.floor(finalStats.sta * 0.1), intel: Math.floor(finalStats.intel * 0.1), agi: Math.floor(finalStats.agi * 0.1), chakra: Math.floor(finalStats.chakra * 0.1), };
-            const totalStats = { 
-                str: finalStats.str + guildBonus.str, 
-                sta: finalStats.sta + guildBonus.sta, 
-                intel: finalStats.intel + guildBonus.intel, 
-                agi: finalStats.agi + guildBonus.agi, 
-                chakra: finalStats.chakra + guildBonus.chakra, 
-            };
-            const bonusRows = `<tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.guildBonus}</td><td>+${guildBonus.str}</td><td>+${guildBonus.sta}</td><td>+${guildBonus.intel}</td><td>+${guildBonus.agi}</td><td>+${guildBonus.chakra}</td></tr><tr class="bg-slate-700"><td class="p-3 text-base text-slate-100 font-bold text-left">${langStrings.totalLevel.replace('{level}', finalStats.level)}</td><td class="font-bold text-lg">${totalStats.str}</td><td class="font-bold text-lg">${totalStats.sta}</td><td class="font-bold text-lg">${totalStats.intel}</td><td class="font-bold text-lg">${totalStats.agi}</td><td class="font-bold text-lg">${totalStats.chakra}</td></tr>`;
-            attributesTableFoot.innerHTML = bonusRows;
-        }
     }
 
-    function displayBuild(build) {
-        currentDisplayedBuild = build;
-        if (build.focuses && Object.keys(build.focuses).length > 1) {
-            focusContainer.classList.remove('hidden');
-            focusSelect.innerHTML = '';
-            const focusOptions = Object.keys(build.focuses);
-            focusOptions.forEach(focusName => {
-                const option = document.createElement('option');
-                option.value = focusName;
-                option.textContent = langStrings[`focus${focusName}`] || focusName;
-                focusSelect.appendChild(option);
-            });
-            renderAttributes(build.focuses[focusOptions[0]]);
-        } else {
-            focusContainer.classList.add('hidden');
-            renderAttributes(build.focuses[Object.keys(build.focuses)[0]]);
-        }
-
+    function renderJutsus(jutsuArray) {
         jutsuTableBody.innerHTML = '';
         for (let i = 1; i <= 20; i++) {
-            const jutsu = build.jutsuOrder[i - 1];
+            const jutsu = jutsuArray[i - 1];
             let slotNumber;
             if (i <= 17) {
                 slotNumber = i;
@@ -486,6 +527,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const howToGet = jutsu ? getTranslated(jutsu, 'howToGet') : '-';
             const row = `<tr class="hover:bg-slate-700/50"><td class="p-3 text-sm text-slate-200 font-bold">${slotNumber}</td><td class="p-3 text-sm text-slate-300">${level}</td><td class="p-3 text-sm text-slate-300">${name}</td><td class="p-3 text-sm text-slate-400">${howToGet}</td></tr>`;
             jutsuTableBody.innerHTML += row;
+        }
+    }
+
+    function displayBuild(build) {
+        currentDisplayedBuild = build;
+        const bonusContainer = document.getElementById('guild-bonus-container');
+        bonusContainer.classList.remove('hidden');
+
+        if (build.focuses && Object.keys(build.focuses).length > 1) {
+            focusContainer.classList.remove('hidden');
+            focusSelect.innerHTML = '';
+            const focusOptions = Object.keys(build.focuses);
+            focusOptions.forEach(focusName => {
+                const option = document.createElement('option');
+                option.value = focusName;
+                const translationKey = `focus${focusName.charAt(0).toUpperCase() + focusName.slice(1)}`;
+                option.textContent = langStrings[translationKey] || focusName;
+                focusSelect.appendChild(option);
+            });
+            const defaultFocusData = build.focuses[focusOptions[0]];
+            renderAttributes(defaultFocusData.stats);
+            renderJutsus(defaultFocusData.jutsuOrder);
+        } else {
+            focusContainer.classList.add('hidden');
+            const focusData = build.focuses[Object.keys(build.focuses)[0]];
+            renderAttributes(focusData.stats);
+            renderJutsus(focusData.jutsuOrder);
         }
 
         itemsTableBody.innerHTML = '';
@@ -508,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showFeedback(message) {
         feedbackMessageDiv.textContent = message;
         feedbackMessageDiv.classList.remove('hidden');
+        document.getElementById('guild-bonus-container').classList.add('hidden');
         feedbackMessageDiv.classList.add('fade-in');
     }
     
@@ -533,5 +602,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-
 
