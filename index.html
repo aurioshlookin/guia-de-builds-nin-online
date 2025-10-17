@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nin Online - Guia de Builds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb; /* bg-gray-200 */
+            color: #e5e7eb; /* text-gray-200 */
+        }
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        option:disabled {
+            color: #6b7280;
+        }
+        /* Animação de fade-in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        /* Custom scrollbar for Jutsu list */
+        .jutsu-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .jutsu-scroll::-webkit-scrollbar-track {
+            background-color: #334155; /* slate-700 */
+            border-radius: 10px;
+        }
+        .jutsu-scroll::-webkit-scrollbar-thumb {
+            background-color: #64748b; /* slate-500 */
+            border-radius: 10px;
+        }
+        .jutsu-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #94a3b8; /* slate-400 */
+        }
+        .lang-btn.active {
+            background-color: #ea580c; /* orange-600 */
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 pt-8">
+
+    <div class="w-full max-w-5xl bg-slate-800 rounded-2xl shadow-lg p-6 md:p-8 relative">
+        <!-- Language Switcher -->
+        <div class="absolute top-4 right-6 flex items-center space-x-2 text-sm">
+            <button data-lang="pt-BR" class="lang-btn px-2 py-1 rounded font-semibold transition-colors">PT-BR</button>
+            <span class="text-slate-600">|</span>
+            <button data-lang="en" class="lang-btn px-2 py-1 rounded font-semibold transition-colors">EN</button>
+        </div>
+
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8 pt-8 md:pt-0">
+            <h1 class="text-3xl md:text-4xl font-bold text-orange-400" data-translate-key="headerTitle">Guia de Builds - Nin Online</h1>
+            <p class="text-slate-400 mt-2" data-translate-key="headerSubtitle">Encontre a build recomendada para sua combinação de maestrias.</p>
+        </header>
+
+        <!-- Seção de Seleção de Maestrias -->
+        <div class="bg-slate-900/50 p-6 rounded-lg mb-8 border border-slate-700">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div class="md-col-span-1">
+                    <label for="mastery1" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery1Label">Maestria Principal</label>
+                    <select id="mastery1" class="w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="mastery2" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery2Label">Maestria Secundária</label>
+                    <select id="mastery2" class="w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select" disabled></select>
+                </div>
+                <div class="md:col-span-1">
+                    <button id="find-build-btn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-colors h-10 disabled:bg-slate-600 disabled:cursor-not-allowed" data-translate-key="findBuildBtn">Buscar Build</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Resultados da Build -->
+        <div id="build-results" class="hidden space-y-8">
+            <!-- 1. Atributos por Nível -->
+            <section id="attributes-section">
+                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="attributesTitle">Atributos Recomendados</h2>
+                
+                <div id="attribute-focus-container" class="hidden items-center mb-4">
+                    <label for="attribute-focus-select" class="text-sm font-medium text-slate-300 mr-4" data-translate-key="focusLabel">Foco da Build:</label>
+                    <select id="attribute-focus-select" class="w-52 bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-slate-900/50 rounded-lg text-center">
+                        <thead class="bg-slate-700">
+                            <tr>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thLevel">Nível</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thStrength">Força</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thFortitude">Fortitude</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thIntellect">Intelecto</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thAgility">Agilidade</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thChakra">Chakra</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attributes-table-body" class="divide-y divide-slate-700"></tbody>
+                        <tfoot id="attributes-table-foot" class="border-t-2 border-slate-700"></tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 2. Ordem dos Jutsus -->
+            <section id="jutsu-section">
+                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="jutsuTitle">Ordem de Jutsus Sugerida</h2>
+                <div class="bg-slate-900/50 rounded-lg overflow-hidden">
+                    <div class="max-h-96 overflow-y-auto jutsu-scroll">
+                        <table class="min-w-full">
+                            <thead class="bg-slate-700 sticky top-0">
+                                <tr>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left w-24 text-slate-300" data-translate-key="thSlot">Slot</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left w-16 text-slate-300" data-translate-key="thLevel">Nível</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thJutsu">Jutsu</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thHowToGet">Como Obter</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jutsu-table-body" class="divide-y divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Itens Recomendados -->
+            <section id="items-section">
+                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="itemsTitle">Itens Recomendados</h2>
+                <div class="overflow-x-auto">
+                     <table class="min-w-full bg-slate-900/50 rounded-lg">
+                        <thead class="bg-slate-700">
+                            <tr>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thType">Tipo</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thRecommendedItem">Item Recomendado</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thDamage">Dano</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thAttribute">Atributo</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thEffect">Efeito</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thObservation">Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-table-body" class="divide-y divide-slate-700"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div id="feedback-message" class="hidden text-center p-6 bg-yellow-900/40 text-yellow-300 rounded-lg mt-8 border border-yellow-800"></div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- LÓGICA DE TRADUÇÃO ---
+    const translations = {
+        'pt-BR': {
+            pageTitle: "Nin Online - Guia de Builds", headerTitle: "Guia de Builds - Nin Online", headerSubtitle: "Encontre a build recomendada para sua combinação de maestrias.", mastery1Label: "Maestria Principal", mastery2Label: "Maestria Secundária", findBuildBtn: "Buscar Build", attributesTitle: "Atributos Recomendados", focusLabel: "Foco da Build:", thLevel: "Nível", thStrength: "Força", thFortitude: "Fortitude", thIntellect: "Intelecto", thAgility: "Agilidade", thChakra: "Chakra", jutsuTitle: "Ordem de Jutsus Sugerida", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "Como Obter", itemsTitle: "Itens Recomendados", thType: "Tipo", thRecommendedItem: "Item Recomendado", thDamage: "Dano", thAttribute: "Atributo", thEffect: "Efeito", thObservation: "Observação", feedbackSelectMastery: "Por favor, selecione pelo menos a maestria principal.", feedbackNotFoundMastery: "Nenhuma build foi encontrada para a maestria: {m1}.", feedbackNotFoundCombination: "Nenhuma build foi encontrada para a combinação: {m1} + {m2}.", guildBonus: "Bônus de Guilda (10%)", otherBonuses: "Outros Bônus", totalLevel: "Total (Nível {level})", slotExtra: "Extra {num}", slotEmpty: "Vazio", focusIntellect: "Intelecto", focusChakra: "Chakra", masteryNames: { none: 'Nenhuma', fogo: 'Fogo', agua: 'Água', bolha: 'Bolha (Água)', terra: 'Terra', raio: 'Raio', vento: 'Vento', leque: 'Leque (Vento)', medico: 'Médico', arma: 'Arma', taijutsu: 'Taijutsu', punho_gentil: 'Punho Gentil (Taijutsu)' }, itemTypes: { Weapon: 'Arma', Clothing: 'Roupa', Accessory: 'Acessório' }
+        },
+        'en': {
+            pageTitle: "Nin Online - Build Guide", headerTitle: "Nin Online Build Guide", headerSubtitle: "Find the recommended build for your mastery combination.", mastery1Label: "Main Mastery", mastery2Label: "Secondary Mastery", findBuildBtn: "Find Build", attributesTitle: "Recommended Attributes", focusLabel: "Build Focus:", thLevel: "Level", thStrength: "Strength", thFortitude: "Fortitude", thIntellect: "Intellect", thAgility: "Agility", thChakra: "Chakra", jutsuTitle: "Suggested Jutsu Order", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "How to Get", itemsTitle: "Recommended Items", thType: "Type", thRecommendedItem: "Recommended Item", thDamage: "Damage", thAttribute: "Attribute", thEffect: "Effect", thObservation: "Observation", feedbackSelectMastery: "Please select at least the main mastery.", feedbackNotFoundMastery: "No build was found for the mastery: {m1}.", feedbackNotFoundCombination: "No build was found for the combination: {m1} + {m2}.", guildBonus: "Guild Bonus (10%)", otherBonuses: "Other Bonuses", totalLevel: "Total (Level {level})", slotExtra: "Extra {num}", slotEmpty: "Empty", focusIntellect: "Intellect", focusChakra: "Chakra", masteryNames: { none: 'None', fogo: 'Fire', agua: 'Water', bolha: 'Bubble (Water)', terra: 'Earth', raio: 'Lightning', vento: 'Wind', leque: 'Fan (Wind)', medico: 'Medical', arma: 'Weapon', taijutsu: 'Taijutsu', punho_gentil: 'Gentle Fist (Taijutsu)' }, itemTypes: { Weapon: 'Weapon', Clothing: 'Clothing', Accessory: 'Accessory' }
+        }
+    };
+
+    let currentLang;
+    let langStrings;
+
+    // --- DADOS DAS BUILDS ---
+    const buildData = {
+        'fogo': {
+            'agua': {
+                jutsuOrder: [
+                    { level: 10, name: { 'pt-BR': "Jutsu Bola de Fogo", 'en': "Fire Ball Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia", 'en': "Academy Mission" } }, { level: 20, name: { 'pt-BR': "Jutsu Prisão de Água", 'en': "Water Prison Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia (Água)", 'en': "Academy Mission (Water)" } }, { level: 25, name: { 'pt-BR': "Grande Aniquilação de Fogo", 'en': "Great Fire Annihilation" }, howToGet: { 'pt-BR': "NPC Mestre do Fogo", 'en': "Fire Master NPC" } }, { level: 35, name: { 'pt-BR': "Jutsu Dragão de Água", 'en': "Water Dragon Jutsu" }, howToGet: { 'pt-BR': "Pergaminho (Drop)", 'en': "Scroll (Drop)" } }, { level: 45, name: { 'pt-BR': "Jutsu Mar de Chamas", 'en': "Sea of Flames Jutsu" }, howToGet: { 'pt-BR': "Missão Especial (Fogo)", 'en': "Special Mission (Fire)" } }, { level: 55, name: { 'pt-BR': "Grande Onda de Choque Aquática", 'en': "Great Water Shockwave" }, howToGet: { 'pt-BR': "Missão Especial (Água)", 'en': "Special Mission (Water)" } },
+                ],
+                items: {
+                    'Weapon': { name: { 'pt-BR': "Leque de Batalha", 'en': "Battle Fan" }, dmg: "Variável", attr: "+12 Intelecto", effect: { 'pt-BR': "Aumenta dano elemental em 3%", 'en': "Increases elemental damage by 3%" }, obs: { 'pt-BR': "Ideal para ninjas que usam múltiplos elementos.", 'en': "Ideal for ninjas who use multiple elements." } }, 'Clothing': { name: { 'pt-BR': "Manto do Kage", 'en': "Kage Cloak" }, dmg: "N/A", attr: "+15 Chakra, +5 Fortitude", effect: { 'pt-BR': "Redução de Dano +5%", 'en': "Damage Reduction +5%" }, obs: { 'pt-BR': "Equilíbrio entre poder ofensivo e defesa.", 'en': "Balance between offensive power and defense." } }, 'Accessory': { name: { 'pt-BR': "Colar do Sábio dos Seis Caminhos", 'en': "Sage of Six Paths Necklace" }, dmg: "N/A", attr: "+8 Intelecto, +8 Chakra", effect: "N/A", obs: { 'pt-BR': "Melhor acessório para maximizar o dano de ninjutsu.", 'en': "Best accessory to maximize ninjutsu damage." } }
+                },
+                otherBonuses: { str: 0, sta: 5, intel: 20, agi: 0, chakra: 23 },
+                focuses: { 'Intelecto': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 15, chakra: 10, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 25, chakra: 15, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 40, chakra: 15, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 50, chakra: 25, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 60, chakra: 35, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 70, chakra: 45, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 80, chakra: 55, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 90, chakra: 60, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 100, chakra: 70, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 100, chakra: 80, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 100, chakra: 85, sta: 65 }, ] }
+            }
+        },
+        'agua': {
+            'medico': {
+                jutsuOrder: [
+                    { level: 10, name: { 'pt-BR': "Jutsu Prisão de Água", 'en': "Water Prison Jutsu" }, howToGet: { 'pt-BR': "Missão da Academia", 'en': "Academy Mission" } }, { level: 15, name: { 'pt-BR': "Palma Mística (Cura Básica)", 'en': "Mystical Palm (Basic Heal)" }, howToGet: { 'pt-BR': "NPC Mestre Médico", 'en': "Medical Master NPC" } }, { level: 30, name: { 'pt-BR': "Jutsu Dragão de Água", 'en': "Water Dragon Jutsu" }, howToGet: { 'pt-BR': "Pergaminho (Drop)", 'en': "Scroll (Drop)" } }, { level: 40, name: { 'pt-BR': "Cura Avançada em Área", 'en': "Advanced Area Heal" }, howToGet: { 'pt-BR': "NPC Mestre Médico", 'en': "Medical Master NPC" } }, { level: 50, name: { 'pt-BR': "Grande Onda de Choque Aquática", 'en': "Great Water Shockwave" }, howToGet: { 'pt-BR': "Missão Especial", 'en': "Special Mission" } }, { level: 60, name: { 'pt-BR': "Técnica de Regeneração Celular", 'en': "Cell Regeneration Technique" }, howToGet: { 'pt-BR': "Missão Lendária", 'en': "Legendary Mission" } },
+                ],
+                items: {
+                    'Weapon': { name: { 'pt-BR': "Tanto Medicinal", 'en': "Medicinal Tanto" }, dmg: "N/A", attr: "+10 Intelecto", effect: { 'pt-BR': "Poder de Cura +5%", 'en': "Healing Power +5%" }, obs: { 'pt-BR': "Aumenta o poder dos jutsus médicos.", 'en': "Increases the power of medical jutsus." } }, 'Clothing': { name: { 'pt-BR': "Vestes de Sábio", 'en': "Sage Robes" }, dmg: "N/A", attr: "+10 Chakra", effect: { 'pt-BR': "Redução de Custo de Chakra -5%", 'en': "Chakra Cost Reduction -5%" }, obs: { 'pt-BR': "Oferece mais recursos para jutsus.", 'en': "Provides more resources for jutsus." } }, 'Accessory': { name: { 'pt-BR': "Amuleto da Sabedoria", 'en': "Amulet of Wisdom" }, dmg: "N/A", attr: "+5 Intelecto, +5 Chakra", effect: "N/A", obs: { 'pt-BR': "Aumenta a sobrevivência e o poder.", 'en': "Increases survivability and power." } }
+                },
+                otherBonuses: { str: 0, sta: 5, intel: 10, agi: 0, chakra: 5 },
+                focuses: { 'Intelecto': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 15, chakra: 10, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 25, chakra: 15, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 35, chakra: 20, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 45, chakra: 25, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 55, chakra: 35, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 65, chakra: 40, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 75, chakra: 50, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 85, chakra: 55, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 100, chakra: 60, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 100, chakra: 70, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 100, chakra: 80, sta: 65 }, ], 'Chakra': [ { level: 5, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 }, { level: 10, str: 5, agi: 5, intel: 10, chakra: 15, sta: 5 }, { level: 15, str: 5, agi: 5, intel: 15, chakra: 25, sta: 5 }, { level: 20, str: 5, agi: 5, intel: 20, chakra: 35, sta: 10 }, { level: 25, str: 5, agi: 10, intel: 25, chakra: 45, sta: 15 }, { level: 30, str: 5, agi: 10, intel: 35, chakra: 55, sta: 20 }, { level: 35, str: 5, agi: 10, intel: 40, chakra: 65, sta: 25 }, { level: 40, str: 5, agi: 15, intel: 50, chakra: 75, sta: 30 }, { level: 45, str: 5, agi: 15, intel: 55, chakra: 85, sta: 40 }, { level: 50, str: 5, agi: 15, intel: 60, chakra: 100, sta: 45 }, { level: 55, str: 5, agi: 20, intel: 70, chakra: 100, sta: 55 }, { level: 60, str: 5, agi: 20, intel: 80, chakra: 100, sta: 65 }, ] }
+            }
+        },
+    };
+
+    // --- LÓGICA DA PÁGINA ---
+    const mastery1Select = document.getElementById('mastery1');
+    const mastery2Select = document.getElementById('mastery2');
+    const findBuildBtn = document.getElementById('find-build-btn');
+    const buildResultsDiv = document.getElementById('build-results');
+    const feedbackMessageDiv = document.getElementById('feedback-message');
+    const attributesTableBody = document.getElementById('attributes-table-body');
+    const attributesTableFoot = document.getElementById('attributes-table-foot');
+    const jutsuTableBody = document.getElementById('jutsu-table-body');
+    const itemsTableBody = document.getElementById('items-table-body');
+    const exclusiveMasteries = ['bolha', 'leque', 'punho_gentil'];
+    let currentDisplayedBuild = null;
+    const focusContainer = document.getElementById('attribute-focus-container');
+    const focusSelect = document.getElementById('attribute-focus-select');
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        langStrings = translations[currentLang];
+        localStorage.setItem('ninBuildsLang', currentLang);
+
+        applyTranslations();
+        populateMasterySelects();
+        updateLangSwitcherUI();
+
+        if (!buildResultsDiv.classList.contains('hidden') && currentDisplayedBuild) {
+            displayBuild(currentDisplayedBuild);
+        }
+    }
+
+    function updateLangSwitcherUI() {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.lang === currentLang) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
+    function applyTranslations() {
+        document.querySelectorAll('[data-translate-key]').forEach(el => {
+            const key = el.getAttribute('data-translate-key');
+            if (langStrings[key]) {
+                el.textContent = langStrings[key];
+            }
+        });
+        document.title = langStrings.pageTitle;
+    }
+    
+    function populateMasterySelects() {
+        const currentM1 = mastery1Select.value;
+        const currentM2 = mastery2Select.value;
+        
+        // Repopulate M1
+        mastery1Select.innerHTML = '';
+        const masteryOptions = Object.keys(langStrings.masteryNames);
+        masteryOptions.forEach(key => {
+            const option1 = document.createElement('option');
+            option1.value = key;
+            option1.textContent = langStrings.masteryNames[key];
+            mastery1Select.appendChild(option1);
+        });
+        mastery1Select.value = currentM1 || 'none';
+
+        // Repopulate M2 and apply filters based on M1
+        mastery2Select.innerHTML = '';
+        masteryOptions.forEach(key => {
+            const option2 = document.createElement('option');
+            option2.value = key;
+            option2.textContent = langStrings.masteryNames[key];
+            mastery2Select.appendChild(option2);
+        });
+
+        if (currentM1 === 'none' || !currentM1) {
+            mastery2Select.disabled = true;
+        } else {
+            mastery2Select.disabled = false;
+            const isPrimaryExclusive = exclusiveMasteries.includes(currentM1);
+            Array.from(mastery2Select.options).forEach(option => {
+                const isOptionExclusive = exclusiveMasteries.includes(option.value);
+                if (option.value === currentM1 || (isPrimaryExclusive && isOptionExclusive)) {
+                    option.remove();
+                }
+            });
+        }
+        
+        // Restore the saved value for M2
+        mastery2Select.value = currentM2 || 'none';
+        
+        // Update availability and button state without resetting M2
+        updateMasteryAvailability();
+        updateFindButtonState();
+    }
+    
+    function getTranslated(obj, key) {
+        if (typeof obj === 'object' && obj !== null && obj[key] !== undefined) {
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                return obj[key][currentLang] || obj[key]['pt-BR'];
+            }
+            return obj[key];
+        }
+        return '-';
+    }
+
+    function updateFindButtonState() {
+        const m1 = mastery1Select.value;
+        const m2 = mastery2Select.value;
+        if (m1 === 'none') {
+            findBuildBtn.disabled = true;
+            return;
+        }
+        const buildExists = buildData[m1] && buildData[m1][m2];
+        findBuildBtn.disabled = !buildExists;
+    }
+
+    function updateMasteryAvailability() {
+        const m1Value = mastery1Select.value;
+        for (const option of mastery1Select.options) {
+            if (option.value === 'none') continue;
+            const hasBuilds = buildData[option.value] && Object.keys(buildData[option.value]).length > 0;
+            option.disabled = !hasBuilds;
+        }
+        if (m1Value !== 'none' && buildData[m1Value]) {
+            for (const option of mastery2Select.options) {
+                const buildExists = buildData[m1Value][option.value];
+                option.disabled = !buildExists;
+            }
+        }
+    }
+
+    mastery1Select.addEventListener('change', () => {
+        const selectedValue = mastery1Select.value;
+        const currentM2Value = mastery2Select.value;
+        mastery2Select.innerHTML = '';
+        
+        const masteryOptions = Object.keys(langStrings.masteryNames);
+        masteryOptions.forEach(key => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = langStrings.masteryNames[key];
+            mastery2Select.appendChild(option);
+        });
+
+        if (selectedValue === 'none') {
+            mastery2Select.disabled = true;
+        } else {
+            mastery2Select.disabled = false;
+            const isPrimaryExclusive = exclusiveMasteries.includes(selectedValue);
+            Array.from(mastery2Select.options).forEach(option => {
+                const isOptionExclusive = exclusiveMasteries.includes(option.value);
+                if (option.value === selectedValue || (isPrimaryExclusive && isOptionExclusive)) {
+                    option.remove();
+                }
+            });
+        }
+        mastery2Select.value = 'none';
+        updateMasteryAvailability();
+        updateFindButtonState();
+    });
+    
+    mastery2Select.addEventListener('change', updateFindButtonState);
+
+    findBuildBtn.addEventListener('click', () => {
+        const m1 = mastery1Select.value;
+        const m2 = mastery2Select.value;
+        buildResultsDiv.classList.add('hidden');
+        feedbackMessageDiv.classList.add('hidden');
+        
+        if (m1 === 'none') {
+            showFeedback(langStrings.feedbackSelectMastery);
+            return;
+        }
+        
+        const build = buildData[m1] && buildData[m1][m2];
+        if (build) {
+            displayBuild(build);
+        } else {
+            const m1Text = langStrings.masteryNames[m1];
+            if (m2 === 'none') {
+                showFeedback(langStrings.feedbackNotFoundMastery.replace('{m1}', m1Text));
+            } else {
+                const m2Text = langStrings.masteryNames[m2];
+                showFeedback(langStrings.feedbackNotFoundCombination.replace('{m1}', m1Text).replace('{m2}', m2Text));
+            }
+        }
+    });
+
+    focusSelect.addEventListener('change', () => {
+        const selectedFocus = focusSelect.value;
+        if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
+            renderAttributes(currentDisplayedBuild.focuses[selectedFocus], currentDisplayedBuild.otherBonuses);
+        }
+    });
+    
+    function renderAttributes(attributesArray, otherBonuses = { str: 0, sta: 0, intel: 0, agi: 0, chakra: 0 }) {
+        attributesTableBody.innerHTML = '';
+        attributesTableFoot.innerHTML = '';
+        
+        attributesArray.forEach(stat => {
+            const row = `<tr><td class="p-2 text-sm text-slate-300 font-bold text-left">${stat.level}</td><td class="p-2 text-sm text-slate-300">${stat.str}</td><td class="p-2 text-sm text-slate-300">${stat.sta}</td><td class="p-2 text-sm text-slate-300">${stat.intel}</td><td class="p-2 text-sm text-slate-300">${stat.agi}</td><td class="p-2 text-sm text-slate-300">${stat.chakra}</td></tr>`;
+            attributesTableBody.innerHTML += row;
+        });
+
+        if(attributesArray.length > 0) {
+            const finalStats = attributesArray[attributesArray.length - 1];
+            const guildBonus = { str: Math.floor(finalStats.str * 0.1), sta: Math.floor(finalStats.sta * 0.1), intel: Math.floor(finalStats.intel * 0.1), agi: Math.floor(finalStats.agi * 0.1), chakra: Math.floor(finalStats.chakra * 0.1), };
+            const totalStats = { str: finalStats.str + guildBonus.str + otherBonuses.str, sta: finalStats.sta + guildBonus.sta + otherBonuses.sta, intel: finalStats.intel + guildBonus.intel + otherBonuses.intel, agi: finalStats.agi + guildBonus.agi + otherBonuses.agi, chakra: finalStats.chakra + guildBonus.chakra + otherBonuses.chakra, };
+            const bonusRows = `<tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.guildBonus}</td><td>+${guildBonus.str}</td><td>+${guildBonus.sta}</td><td>+${guildBonus.intel}</td><td>+${guildBonus.agi}</td><td>+${guildBonus.chakra}</td></tr><tr class=""><td class="p-2 text-sm text-orange-400 font-semibold text-left">${langStrings.otherBonuses}</td><td>+${otherBonuses.str}</td><td>+${otherBonuses.sta}</td><td>+${otherBonuses.intel}</td><td>+${otherBonuses.agi}</td><td>+${otherBonuses.chakra}</td></tr><tr class="bg-slate-700"><td class="p-3 text-base text-slate-100 font-bold text-left">${langStrings.totalLevel.replace('{level}', finalStats.level)}</td><td class="font-bold text-lg">${totalStats.str}</td><td class="font-bold text-lg">${totalStats.sta}</td><td class="font-bold text-lg">${totalStats.intel}</td><td class="font-bold text-lg">${totalStats.agi}</td><td class="font-bold text-lg">${totalStats.chakra}</td></tr>`;
+            attributesTableFoot.innerHTML = bonusRows;
+        }
+    }
+
+    function displayBuild(build) {
+        currentDisplayedBuild = build;
+        if (build.focuses && Object.keys(build.focuses).length > 1) {
+            focusContainer.classList.remove('hidden');
+            focusSelect.innerHTML = '';
+            const focusOptions = Object.keys(build.focuses);
+            focusOptions.forEach(focusName => {
+                const option = document.createElement('option');
+                option.value = focusName;
+                option.textContent = langStrings[`focus${focusName}`] || focusName;
+                focusSelect.appendChild(option);
+            });
+            renderAttributes(build.focuses[focusOptions[0]], build.otherBonuses);
+        } else {
+            focusContainer.classList.add('hidden');
+            renderAttributes(build.focuses[Object.keys(build.focuses)[0]], build.otherBonuses);
+        }
+
+        jutsuTableBody.innerHTML = '';
+        for (let i = 1; i <= 20; i++) {
+            const jutsu = build.jutsuOrder[i - 1];
+            let slotNumber;
+            if (i <= 17) {
+                slotNumber = i;
+            } else {
+                slotNumber = `<span class="text-yellow-400 font-semibold">${langStrings.slotExtra.replace('{num}', i - 17)}</span>`;
+            }
+            const level = jutsu ? jutsu.level : '-';
+            const name = jutsu ? getTranslated(jutsu, 'name') : `<i class="text-slate-500">${langStrings.slotEmpty}</i>`;
+            const howToGet = jutsu ? getTranslated(jutsu, 'howToGet') : '-';
+            const row = `<tr class="hover:bg-slate-700/50"><td class="p-3 text-sm text-slate-200 font-bold">${slotNumber}</td><td class="p-3 text-sm text-slate-300">${level}</td><td class="p-3 text-sm text-slate-300">${name}</td><td class="p-3 text-sm text-slate-400">${howToGet}</td></tr>`;
+            jutsuTableBody.innerHTML += row;
+        }
+
+        itemsTableBody.innerHTML = '';
+        for (const [category, itemData] of Object.entries(build.items)) {
+            const row = `<tr class="hover:bg-slate-700/50">
+                            <td class="p-3 text-sm text-orange-400 font-semibold">${langStrings.itemTypes[category] || category}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'name')}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'dmg')}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'attr')}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'effect')}</td>
+                            <td class="p-3 text-sm text-slate-400">${getTranslated(itemData, 'obs')}</td>
+                        </tr>`;
+            itemsTableBody.innerHTML += row;
+        }
+
+        buildResultsDiv.classList.remove('hidden');
+        buildResultsDiv.classList.add('fade-in');
+    }
+
+    function showFeedback(message) {
+        feedbackMessageDiv.textContent = message;
+        feedbackMessageDiv.classList.remove('hidden');
+        feedbackMessageDiv.classList.add('fade-in');
+    }
+    
+    // --- INITIALIZATION ---
+    function getInitialLanguage() {
+        const savedLang = localStorage.getItem('ninBuildsLang');
+        if (savedLang && translations[savedLang]) {
+            return savedLang;
+        }
+        const browserLang = (navigator.language || navigator.userLanguage).toLowerCase();
+        return browserLang === 'pt-br' ? 'pt-BR' : 'en';
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setLanguage(btn.dataset.lang);
+        });
+    });
+    
+    setLanguage(getInitialLanguage());
+});
+</script>
+
+</body>
+</html>
+
+
