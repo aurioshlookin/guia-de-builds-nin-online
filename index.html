@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -98,7 +98,7 @@
         <!-- Seção de Status da Build -->
         <div id="build-status-overview" class="hidden bg-slate-900/50 p-4 rounded-lg mb-6 border border-slate-700">
             <div class="grid grid-cols-1 md:grid-cols-2 md:gap-x-8 gap-y-4">
-                <!-- Left Column: Build Status & Info -->
+                <!-- Left Column: Build Status -->
                 <div>
                     <h3 class="text-lg font-semibold text-slate-300 mb-3" data-translate-key="buildStatusTitle">Status da Build</h3>
                     <div class="space-y-2">
@@ -115,16 +115,6 @@
                             <span id="status-items-badge" class="px-2 py-0.5 text-xs font-bold rounded-full"></span>
                         </div>
                     </div>
-                     <div id="build-info-section" class="hidden mt-4 pt-4 border-t border-slate-700/50">
-                         <div class="flex text-sm">
-                            <span class="font-medium text-slate-400 w-20" data-translate-key="buildVersionLabel">Versão:</span>
-                            <span id="build-version" class="text-slate-300"></span>
-                        </div>
-                         <div class="flex text-sm">
-                            <span class="font-medium text-slate-400 w-20" data-translate-key="buildDateLabel">Data:</span>
-                            <span id="build-date" class="text-slate-300"></span>
-                        </div>
-                    </div>
                 </div>
                 <!-- Right Column: Created By -->
                 <div id="created-by-section" class="hidden md:border-l md:border-slate-700 md:pl-8">
@@ -138,13 +128,13 @@
                             <span class="font-medium text-slate-400 w-24" data-translate-key="creatorVillageLabel">Vila:</span>
                             <span id="creator-village" class="text-slate-300"></span>
                         </div>
-                         <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="creatorRankLabel">Rank:</span>
-                            <span id="creator-rank" class="text-slate-300"></span>
+                        <div class="flex">
+                            <span class="font-medium text-slate-400 w-24" data-translate-key="buildVersionLabel">Versão:</span>
+                            <span id="build-version" class="text-slate-300"></span>
                         </div>
                          <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="creatorOrgLabel">Organização:</span>
-                            <span id="creator-org" class="text-slate-300"></span>
+                            <span class="font-medium text-slate-400 w-24" data-translate-key="buildDateLabel">Data:</span>
+                            <span id="build-date" class="text-slate-300"></span>
                         </div>
                     </div>
                 </div>
@@ -199,10 +189,12 @@
                         <table class="min-w-full">
                             <thead class="bg-slate-700 sticky top-0">
                                 <tr>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left w-24 text-slate-300" data-translate-key="thSlot">Slot</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left w-16 text-slate-300" data-translate-key="thLevel">Nível</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thSlot">Slot</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thSlotLevel">Nível do Slot</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thLevel">Nível</th>
                                     <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thJutsu">Jutsu</th>
                                     <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thHowToGet">Como Obter</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thObservationJutsu">Observação</th>
                                 </tr>
                             </thead>
                             <tbody id="jutsu-table-body" class="divide-y divide-slate-700"></tbody>
@@ -239,7 +231,7 @@
         <p data-translate-key="footerDisclaimer">Este é um projeto de fã não oficial e não é afiliado ao Nin Online. Todos os recursos visuais e nomes de jutsus/itens são propriedade de seus respectivos criadores.</p>
         <p>
             <span data-translate-key="footerCreatedBy">Site desenvolvido por Auriosh. </span>
-            <span data-translate-key="footerContact">Encontrou um erro ou quer sugerir uma build? Contate @auriosh.</span>
+            <span data-translate-key="footerContact">Encontrou um erro ou quer sugerir uma build? Procure por @auriosh no Discord.</span>
         </p>
          <p data-translate-key="footerAcknowledgements">Agradecimentos especiais a todos os jogadores que contribuem com builds para a comunidade.</p>
     </footer>
@@ -249,103 +241,99 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE TRADUÇÃO ---
     const translations = {
         'pt-BR': {
-            pageTitle: "Nin Online - Guia de Builds", headerTitle: "Guia de Builds - Nin Online", headerSubtitle: "Encontre a build recomendada para sua combinação de maestrias.", mastery1Label: "Maestria Principal", mastery2Label: "Maestria Secundária", findBuildBtn: "Buscar Build", attributesTitle: "Atributos Recomendados", focusLabel: "Foco da Build:", thLevel: "Nível", thStrength: "Força", thFortitude: "Fortitude", thIntellect: "Intelecto", thAgility: "Agilidade", thChakra: "Chakra", thHealth: "Vida", thChakraPool: "Chakra", jutsuTitle: "Ordem de Jutsus Sugerida", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "Como Obter", itemsTitle: "Itens Recomendados", thType: "Tipo", thRecommendedItem: "Item Recomendado", thDamage: "Dano", thAttribute: "Atributo", thEffect: "Efeito", thObservation: "Observação", feedbackSelectMastery: "Por favor, selecione pelo menos a maestria principal.", feedbackNotFoundMastery: "Nenhuma build foi encontrada para a maestria: {m1}.", feedbackNotFoundCombination: "Nenhuma build foi encontrada para a combinação: {m1} + {m2}.", guildBonus: "Bônus de Guilda (10%)", otherBonuses: "Outros Bônus", totalLevel: "Total (Nível {level})", slotExtra: "Extra {num}", slotEmpty: "Vazio", focusIntellect: "Intelecto", focusChakra: "Chakra", guildBonusLegend: "Bônus de Guilda (10%)", buildStatusTitle: "Status da Build", statusAttributes: "Atributos:", statusJutsus: "Jutsus:", statusItems: "Itens:", statusOk: "OK", statusPending: "Pendente", createdByTitle: "Criado por:", creatorNameLabel: "Nome:", creatorVillageLabel: "Vila:", creatorRankLabel: "Rank:", creatorOrgLabel: "Organização:", buildVersionLabel: "Versão:", buildDateLabel: "Data:", footerDisclaimer: "Este é um projeto de fã não oficial e não é afiliado ao Nin Online. Todos os recursos visuais e nomes de jutsus/itens são propriedade de seus respectivos criadores.", footerCreatedBy: "Site desenvolvido por Auriosh.", footerContact: "Encontrou um erro ou quer sugerir uma build? Contate @auriosh.", footerAcknowledgements: "Agradecimentos especiais a todos os jogadores que contribuem com builds para a comunidade.", masteryNames: { none: 'Nenhuma', fogo: 'Fogo', agua: 'Água', bolha: 'Bolha (Água)', terra: 'Terra', raio: 'Raio', vento: 'Vento', leque: 'Leque (Vento)', medico: 'Médico', arma: 'Arma', taijutsu: 'Taijutsu', punho_gentil: 'Punho Gentil (Taijutsu)' }, itemTypes: { Weapon: 'Arma', Clothing: 'Roupa', Accessory: 'Acessório' }
+            pageTitle: "Nin Online - Guia de Builds", headerTitle: "Guia de Builds - Nin Online", headerSubtitle: "Encontre a build recomendada para sua combinação de maestrias.", mastery1Label: "Maestria Principal", mastery2Label: "Maestria Secundária", findBuildBtn: "Buscar Build", attributesTitle: "Atributos Recomendados", focusLabel: "Foco da Build:", thLevel: "Nível", thStrength: "Força", thFortitude: "Fortitude", thIntellect: "Intelecto", thAgility: "Agilidade", thChakra: "Chakra", thHealth: "Vida", thChakraPool: "Chakra", jutsuTitle: "Ordem de Jutsus Sugerida", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "Como Obter", itemsTitle: "Itens Recomendados", thType: "Tipo", thRecommendedItem: "Item Recomendado", thDamage: "Dano", thAttribute: "Atributo", thEffect: "Efeito", thObservation: "Observação", feedbackSelectMastery: "Por favor, selecione pelo menos a maestria principal.", feedbackNotFoundMastery: "Nenhuma build foi encontrada para a maestria: {m1}.", feedbackNotFoundCombination: "Nenhuma build foi encontrada para a combinação: {m1} + {m2}.", guildBonus: "Bônus de Guilda (10%)", otherBonuses: "Outros Bônus", totalLevel: "Total (Nível {level})", slotExtra: "Extra {num}", slotEmpty: "Vazio", focusIntellect: "Intelecto", focusChakra: "Chakra", guildBonusLegend: "Bônus de Guilda (10%)", buildStatusTitle: "Status da Build", statusAttributes: "Atributos:", statusJutsus: "Jutsus:", statusItems: "Itens:", statusOk: "OK", statusPending: "Pendente", createdByTitle: "Criado por:", creatorNameLabel: "Nome:", creatorVillageLabel: "Vila:", buildVersionLabel: "Versão:", buildDateLabel: "Data:", footerDisclaimer: "Este é um projeto de fã não oficial e não é afiliado ao Nin Online. Todos os recursos visuais e nomes de jutsus/itens são propriedade de seus respectivos criadores.", footerCreatedBy: "Site desenvolvido por Auriosh.", footerContact: "Encontrou um erro ou quer sugerir uma build? Procure por @auriosh no Discord.", footerAcknowledgements: "Agradecimentos especiais a todos os jogadores que contribuem com builds para a comunidade.", masteryNames: { none: 'Nenhuma', fogo: 'Fogo', agua: 'Água', bolha: 'Bolha (Água)', terra: 'Terra', raio: 'Raio', vento: 'Vento', leque: 'Leque (Vento)', medico: 'Médico', arma: 'Arma', taijutsu: 'Taijutsu', punho_gentil: 'Punho Gentil (Taijutsu)' }, itemTypes: { Weapon: 'Arma', Clothing: 'Roupa', Accessory: 'Acessório' },
+            thSlotLevel: "Desbloqueio do Slot", level60Suggestion: "(Sugestão)", level50FreedomNote: "A partir do nível 50, a distribuição de pontos é flexível. Os status no nível 60 são apenas uma sugestão para otimizar a build.", unlockLevelText: "Nível {level}", thObservationJutsu: "Observação"
         },
         'en': {
-            pageTitle: "Nin Online - Build Guide", headerTitle: "Nin Online Build Guide", headerSubtitle: "Find the recommended build for your mastery combination.", mastery1Label: "Main Mastery", mastery2Label: "Secondary Mastery", findBuildBtn: "Find Build", attributesTitle: "Recommended Attributes", focusLabel: "Build Focus:", thLevel: "Level", thStrength: "Strength", thFortitude: "Fortitude", thIntellect: "Intellect", thAgility: "Agility", thChakra: "Chakra", thHealth: "Health", thChakraPool: "Chakra Pool", jutsuTitle: "Suggested Jutsu Order", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "How to Get", itemsTitle: "Recommended Items", thType: "Type", thRecommendedItem: "Recommended Item", thDamage: "Damage", thAttribute: "Attribute", thEffect: "Effect", thObservation: "Observation", feedbackSelectMastery: "Please select at least the main mastery.", feedbackNotFoundMastery: "No build was found for the mastery: {m1}.", feedbackNotFoundCombination: "No build was found for the combination: {m1} + {m2}.", guildBonus: "Guild Bonus (10%)", otherBonuses: "Other Bonuses", totalLevel: "Total (Level {level})", slotExtra: "Extra {num}", slotEmpty: "Empty", focusIntellect: "Intellect", focusChakra: "Chakra", guildBonusLegend: "Guild Bonus (10%)", buildStatusTitle: "Build Status", statusAttributes: "Attributes:", statusJutsus: "Jutsus:", statusItems: "Items:", statusOk: "OK", statusPending: "Pending", createdByTitle: "Created by:", creatorNameLabel: "Name:", creatorVillageLabel: "Village:", creatorRankLabel: "Rank:", creatorOrgLabel: "Organization:", buildVersionLabel: "Version:", buildDateLabel: "Date:", footerDisclaimer: "This is an unofficial fan project and is not affiliated with Nin Online. All visual assets and jutsu/item names are property of their respective creators.", footerCreatedBy: "Site developed by Auriosh.", footerContact: "Found a bug or want to suggest a build? Contact @auriosh.", footerAcknowledgements: "Special thanks to all the players who contribute builds to the community.", masteryNames: { none: 'None', fogo: 'Fire', agua: 'Water', bolha: 'Bubble (Water)', terra: 'Earth', raio: 'Lightning', vento: 'Wind', leque: 'Fan (Wind)', medico: 'Medic', arma: 'Weapon', taijutsu: 'Taijutsu', punho_gentil: 'Gentle Fist (Taijutsu)' }, itemTypes: { Weapon: 'Weapon', Clothing: 'Clothing', Accessory: 'Accessory' }
+            pageTitle: "Nin Online - Build Guide", headerTitle: "Nin Online Build Guide", headerSubtitle: "Find the recommended build for your mastery combination.", mastery1Label: "Main Mastery", mastery2Label: "Secondary Mastery", findBuildBtn: "Find Build", attributesTitle: "Recommended Attributes", focusLabel: "Build Focus:", thLevel: "Level", thStrength: "Strength", thFortitude: "Fortitude", thIntellect: "Intellect", thAgility: "Agility", thChakra: "Chakra", thHealth: "Health", thChakraPool: "Chakra Pool", jutsuTitle: "Suggested Jutsu Order", thSlot: "Slot", thJutsu: "Jutsu", thHowToGet: "How to Get", itemsTitle: "Recommended Items", thType: "Type", thRecommendedItem: "Recommended Item", thDamage: "Damage", thAttribute: "Attribute", thEffect: "Effect", thObservation: "Observation", feedbackSelectMastery: "Please select at least the main mastery.", feedbackNotFoundMastery: "No build was found for the mastery: {m1}.", feedbackNotFoundCombination: "No build was found for the combination: {m1} + {m2}.", guildBonus: "Guild Bonus (10%)", otherBonuses: "Other Bonuses", totalLevel: "Total (Level {level})", slotExtra: "Extra {num}", slotEmpty: "Empty", focusIntellect: "Intellect", focusChakra: "Chakra", guildBonusLegend: "Guild Bonus (10%)", buildStatusTitle: "Build Status", statusAttributes: "Attributes:", statusJutsus: "Jutsus:", statusItems: "Items:", statusOk: "OK", statusPending: "Pending", createdByTitle: "Created by:", creatorNameLabel: "Name:", creatorVillageLabel: "Village:", buildVersionLabel: "Version:", buildDateLabel: "Date:", footerDisclaimer: "This is an unofficial fan project and is not affiliated with Nin Online. All visual assets and jutsu/item names are property of their respective creators.", footerCreatedBy: "Site developed by Auriosh.", footerContact: "Found a bug or want to suggest a build? Find @auriosh on Discord.", footerAcknowledgements: "Special thanks to all the players who contribute builds to the community.", masteryNames: { none: 'None', fogo: 'Fire', agua: 'Water', bolha: 'Bubble (Water)', terra: 'Earth', raio: 'Lightning', vento: 'Wind', leque: 'Fan (Wind)', medico: 'Medic', arma: 'Weapon', taijutsu: 'Taijutsu', punho_gentil: 'Gentle Fist (Taijutsu)' }, itemTypes: { Weapon: 'Weapon', Clothing: 'Clothing', Accessory: 'Accessory' },
+            thSlotLevel: "Unlock Level", level60Suggestion: "(Suggestion)", level50FreedomNote: "From level 50 onwards, point distribution is flexible. The stats at level 60 are just a suggestion to optimize the build.", unlockLevelText: "Level {level}", thObservationJutsu: "Observation"
         }
     };
 
     let currentLang;
     let langStrings;
     let isGuildBonusActive = true;
+    let currentFocusKey;
 
     // --- DADOS DAS BUILDS ---
     const buildData = {
-        'medico': {
-            'agua': {
-                 version: 'v5.9.9e',
-                 date: '18/10/2025',
-                 createdBy: {
-                    name: 'Auriosh',
-                    village: { 'pt-BR': 'Névoa', 'en': 'Mist' },
-                    rank: { 'pt-BR': 'Genin', 'en': 'Genin' },
-                    org: { 'pt-BR': 'Corporação Médica da Névoa', 'en': 'Mist Medic Corp' }
+    "fogo": {
+        "none": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "agua": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "terra": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "raio": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "vento": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "medico": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    },
+    "agua": {
+        "none": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "fogo": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "terra": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "raio": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "vento": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "medico": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    },
+    "terra": {
+        "none": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "fogo": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "agua": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "raio": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "vento": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "medico": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    },
+    "raio": {
+        "none": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "fogo": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "agua": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "terra": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "vento": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "medico": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    },
+    "vento": {
+        "none": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "fogo": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "agua": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "terra": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "raio": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "medico": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh / Vin1", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 18, "intel": 28, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 23, "intel": 55, "agi": 5, "chakra": 32 }, { "level": 30, "str": 5, "sta": 35, "intel": 64, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    },
+    "medico": {
+        "none": {
+             "version": "v5.9.9e",
+             "date": "18/10/2025",
+             "createdBy": {
+                "name": "Auriosh",
+                "village": { "en": "Mist" }
+            },
+            "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}},
+            "focuses": {
+                "intellect": {
+                    "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ],
+                    "jutsuOrder": []
                 },
-                items: {
-                    'Weapon': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
-                    'Clothing': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } },
-                    'Accessory': { name: { 'pt-BR': "-", 'en': "-" }, dmg: "-", attr: "-", effect: { 'pt-BR': "-", 'en': "-" }, obs: { 'pt-BR': "-", 'en': "-" } }
-                },
-                focuses: {
-                    'intellect': {
-                        stats: [
-                            { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
-                            { level: 10, str: 5, sta: 21, intel: 25, agi: 5, chakra: 14 },
-                            { level: 20, str: 5, sta: 27, intel: 40, agi: 5, chakra: 43 },
-                            { level: 30, str: 5, sta: 39, intel: 60, agi: 5, chakra: 61 },
-                            { level: 40, str: 5, sta: 67, intel: 82, agi: 5, chakra: 61 },
-                            { level: 50, str: 5, sta: 113, intel: 86, agi: 5, chakra: 61 },
-                            { level: 60, str: 5, sta: 148, intel: 91, agi: 5, chakra: 61 }
-                        ],
-                        jutsuOrder: [
-                            { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                            { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                            { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Medic Corp" } },
-                            { level: 30, name: { 'pt-BR': "Sticky Venom", 'en': "Sticky Venom" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
-                        ]
-                    },
-                    'chakra': {
-                        stats: [
-                            { level: 1, str: 5, agi: 5, intel: 5, chakra: 5, sta: 5 },
-                            { level: 10, str: 5, agi: 5, intel: 25, chakra: 14, sta: 21 },
-                            { level: 20, str: 5, agi: 5, intel: 35, chakra: 36, sta: 39 },
-                            { level: 30, str: 5, agi: 5, intel: 40, chakra: 61, sta: 59 },
-                            { level: 40, str: 5, agi: 5, intel: 40, chakra: 87, sta: 83 },
-                            { level: 50, str: 5, agi: 5, intel: 50, chakra: 105, sta: 105 },
-                            { level: 60, str: 5, agi: 5, intel: 65, chakra: 122, sta: 113 }
-                        ],
-                        jutsuOrder: [
-                            { level: 1, name: { 'pt-BR': "Body Flicker", 'en': "Body Flicker" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                            { level: 1, name: { 'pt-BR': "Substitution", 'en': "Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 1, name: { 'pt-BR': "Cloak of Invisibility", 'en': "Cloak of Invisibility" }, howToGet: { 'pt-BR': "Começa com o Jutsu", 'en': "Starter Jutsu" } },
-                            { level: 10, name: { 'pt-BR': "Treat Wounds", 'en': "Treat Wounds" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 10, name: { 'pt-BR': "Poison Senbon", 'en': "Poison Senbon" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Chakra Scalpel", 'en': "Chakra Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Poison Scalpel", 'en': "Poison Scalpel" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 20, name: { 'pt-BR': "Mystical Palm", 'en': "Mystical Palm" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Poison Cloud", 'en': "Poison Cloud" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Flash Flicker", 'en': "Flash Flicker" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 30, name: { 'pt-BR': "Cell Regeneration Activation", 'en': "Cell Regeneration Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 10, name: { 'pt-BR': "Water Bullet > Triple Water Bullet", 'en': "Water Bullet > Triple Water Bullet" }, howToGet: { 'pt-BR': "Sealable Scroll I", 'en': "Sealable Scroll I" } },
-                            { level: 15, name: { 'pt-BR': "Water Slash", 'en': "Water Slash" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 25, name: { 'pt-BR': "Water Substitution", 'en': "Water Substitution" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 30, name: { 'pt-BR': "Water Prison", 'en': "Water Prison" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 20, name: { 'pt-BR': "Colliding Wave", 'en': "Colliding Wave" }, howToGet: { 'pt-BR': "Sealable Scroll II", 'en': "Sealable Scroll II" } },
-                            { level: 35, name: { 'pt-BR': "Cursed Seal Activation", 'en': "Cursed Seal Activation" }, howToGet: { 'pt-BR': "Sealable Scroll III", 'en': "Sealable Scroll III" } },
-                            { level: 1, name: { 'pt-BR': "Med Corp Seal", 'en': "Med Corp Seal" }, howToGet: { 'pt-BR': "Med Corp", 'en': "Medic Corp" } },
-                            { level: 20, name: { 'pt-BR': "Sensory", 'en': "Sensory" }, howToGet: { 'pt-BR': "Pode ser trocado por Chakra Scalpel", 'en': "Can be swapped for Chakra Scalpel" } },
-                        ]
-                    }
+                "chakra": {
+                     "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 39, "intel": 35, "agi": 5, "chakra": 36 }, { "level": 30, "str": 5, "sta": 59, "intel": 40, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 83, "intel": 40, "agi": 5, "chakra": 87 }, { "level": 50, "str": 5, "sta": 105, "intel": 50, "agi": 5, "chakra": 105 }, { "level": 60, "str": 5, "sta": 113, "intel": 65, "agi": 5, "chakra": 122 } ],
+                     "jutsuOrder": []
                 }
             }
-        }
-    };
+        },
+        "fogo": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "agua": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { 
+                "intellect": {
+                    "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ],
+                    "jutsuOrder": [ { "level": 1, "name": { "en": "Body Flicker" }, "howToGet": { "en": "Starter Jutsu" } }, { "level": 1, "name": { "en": "Substitution" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 1, "name": { "en": "Cloak of Invisibility" }, "howToGet": { "en": "Starter Jutsu" } }, { "level": 10, "name": { "en": "Treat Wounds" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 10, "name": { "en": "Poison Senbon" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Chakra Scalpel" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Poison Scalpel" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 20, "name": { "en": "Mystical Palm" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Poison Cloud" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Flash Flicker" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 30, "name": { "en": "Cell Regeneration Activation" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 10, "name": { "en": "Water Bullet > Triple Water Bullet" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Water Slash" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Water Substitution" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 30, "name": { "en": "Water Prison" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 20, "name": { "en": "Colliding Wave" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 35, "name": { "en": "Cursed Seal Activation" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 1, "name": { "en": "Med Corp Seal" }, "howToGet": { "en": "Medic Corp" } }, { "level": 30, "name": { "en": "Sticky Venom" }, "howToGet": { "en": "Sealable Scroll III" }, "obs": {"en": "Can be used instead of Chakra Scalpel", "pt-BR": "Pode ser usado no lugar de Chakra Scalpel"} }, { "level": 35, "name": { "en": "Great Water Shark" }, "howToGet": { "en": "Sealable Scroll III" }, "obs": {"en": "Can be used instead of Cursed Seal Activation", "pt-BR": "Pode ser usado no lugar de Cursed Seal Activation"} } ]
+                },
+                 "chakra": {
+                     "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 39, "intel": 35, "agi": 5, "chakra": 36 }, { "level": 30, "str": 5, "sta": 59, "intel": 40, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 83, "intel": 40, "agi": 5, "chakra": 87 }, { "level": 50, "str": 5, "sta": 105, "intel": 50, "agi": 5, "chakra": 105 }, { "level": 60, "str": 5, "sta": 113, "intel": 65, "agi": 5, "chakra": 122 } ],
+                     "jutsuOrder": [ { "level": 1, "name": { "en": "Body Flicker" }, "howToGet": { "en": "Starter Jutsu" } }, { "level": 1, "name": { "en": "Substitution" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 1, "name": { "en": "Cloak of Invisibility" }, "howToGet": { "en": "Starter Jutsu" } }, { "level": 10, "name": { "en": "Treat Wounds" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 10, "name": { "en": "Poison Senbon" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Chakra Scalpel" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Poison Scalpel" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 20, "name": { "en": "Mystical Palm" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Poison Cloud" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Flash Flicker" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 30, "name": { "en": "Cell Regeneration Activation" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 10, "name": { "en": "Water Bullet > Triple Water Bullet" }, "howToGet": { "en": "Sealable Scroll I" } }, { "level": 15, "name": { "en": "Water Slash" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 25, "name": { "en": "Water Substitution" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 30, "name": { "en": "Water Prison" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 20, "name": { "en": "Colliding Wave" }, "howToGet": { "en": "Sealable Scroll II" } }, { "level": 35, "name": { "en": "Cursed Seal Activation" }, "howToGet": { "en": "Sealable Scroll III" } }, { "level": 1, "name": { "en": "Med Corp Seal" }, "howToGet": { "en": "Medic Corp" } }, { "level": 20, "name": { "en": "Sensory" }, "howToGet": { "en": "Sealable Scroll II" }, "obs": {"en": "Can be used instead of Chakra Scalpel", "pt-BR": "Pode ser usado no lugar de Chakra Scalpel"} } ]
+                 }
+            }
+         },
+        "terra": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "raio": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } },
+        "vento": { "version": "v5.9.9e", "date": "18/10/2025", "createdBy": { "name": "Auriosh", "village": { "en": "Mist" } }, "items": {"Weapon": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Clothing": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}},"Accessory": {"name": {"en": "-"},"dmg": "-","attr": "-","effect": {"en": "-"},"obs": {"en": "-"}}}, "focuses": { "intellect": { "stats": [ { "level": 1, "str": 5, "agi": 5, "intel": 5, "chakra": 5, "sta": 5 }, { "level": 10, "str": 5, "sta": 21, "intel": 25, "agi": 5, "chakra": 14 }, { "level": 20, "str": 5, "sta": 27, "intel": 40, "agi": 5, "chakra": 43 }, { "level": 30, "str": 5, "sta": 39, "intel": 60, "agi": 5, "chakra": 61 }, { "level": 40, "str": 5, "sta": 67, "intel": 82, "agi": 5, "chakra": 61 }, { "level": 50, "str": 5, "sta": 113, "intel": 86, "agi": 5, "chakra": 61 }, { "level": 60, "str": 5, "sta": 148, "intel": 91, "agi": 5, "chakra": 61 } ], "jutsuOrder": [] } } }
+    }
+};
 
     // --- LÓGICA DA PÁGINA ---
     const mastery1Select = document.getElementById('mastery1');
@@ -361,6 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusContainer = document.getElementById('attribute-focus-container');
     const focusSelect = document.getElementById('attribute-focus-select');
     const guildBonusToggle = document.getElementById('guild-bonus-toggle');
+    const masteryFocusMap = {fogo:['intellect'],agua:['intellect'],terra:['intellect'],raio:['intellect'],vento:['intellect'],medico:['intellect','chakra'],arma:['strength','intellect'],taijutsu:['agility'],bolha:['strength'],leque:['strength'],punho_gentil:['strength']};
+
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -440,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getTranslated(obj, key) {
         if (typeof obj === 'object' && obj !== null && obj[key] !== undefined) {
             if (typeof obj[key] === 'object' && obj[key] !== null) {
-                return obj[key][currentLang] || obj[key]['pt-BR'];
+                return obj[key][currentLang] || obj[key]['en'];
             }
             return obj[key];
         }
@@ -532,6 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     focusSelect.addEventListener('change', () => {
         const selectedFocus = focusSelect.value;
+        currentFocusKey = selectedFocus;
         if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
             const focusData = currentDisplayedBuild.focuses[selectedFocus];
             renderAttributes(focusData.stats);
@@ -541,15 +532,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     guildBonusToggle.addEventListener('change', () => {
         isGuildBonusActive = guildBonusToggle.checked;
-        const selectedFocus = focusSelect.value;
-        if (currentDisplayedBuild && currentDisplayedBuild.focuses && currentDisplayedBuild.focuses[selectedFocus]) {
-            const focusData = currentDisplayedBuild.focuses[selectedFocus];
-            renderAttributes(focusData.stats);
+        if (currentDisplayedBuild && currentFocusKey) {
+             const focusData = currentDisplayedBuild.focuses[currentFocusKey];
+             if(focusData && focusData.stats) {
+                renderAttributes(focusData.stats);
+             }
         }
     });
     
     function renderAttributes(attributesArray) {
         const attributesTableBody = document.getElementById('attributes-table-body');
+        const table = attributesTableBody.closest('table');
+        let tfoot = table.querySelector('tfoot');
+        if (tfoot) tfoot.remove(); // Limpa o tfoot antigo
         attributesTableBody.innerHTML = '';
         
         attributesArray.forEach(stat => {
@@ -570,8 +565,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const agiBonusDisplay = isGuildBonusActive && agiBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${agiBonus})</span>` : '';
             const chakraBonusDisplay = isGuildBonusActive && chakraBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${chakraBonus})</span>` : '';
 
-            const row = `<tr>
-                <td class="p-2 text-sm text-slate-300 font-bold text-left">${stat.level}</td>
+            const isSuggestion = stat.level === 60;
+            const rowClass = isSuggestion ? 'bg-slate-800/60' : '';
+            const levelDisplay = isSuggestion ? `${stat.level} <span class="text-xs text-yellow-400 font-normal">${langStrings.level60Suggestion}</span>` : stat.level;
+
+
+            const row = `<tr class="${rowClass}">
+                <td class="p-2 text-sm text-slate-300 font-bold text-left">${levelDisplay}</td>
                 <td class="p-2 text-sm text-slate-300">${stat.str}${strBonusDisplay}</td>
                 <td class="p-2 text-sm text-slate-300">${stat.sta}${staBonusDisplay}</td>
                 <td class="p-2 text-sm text-slate-300">${stat.intel}${intelBonusDisplay}</td>
@@ -582,6 +582,24 @@ document.addEventListener('DOMContentLoaded', () => {
             </tr>`;
             attributesTableBody.innerHTML += row;
         });
+
+        // Adiciona a nota de rodapé sobre a flexibilidade dos status
+        tfoot = document.createElement('tfoot');
+        tfoot.innerHTML = `
+            <tr class="bg-slate-900/50">
+                <td colspan="8" class="p-3 text-xs text-slate-400 text-center italic border-t-2 border-slate-700" data-translate-key="level50FreedomNote">
+                    ${langStrings.level50FreedomNote}
+                </td>
+            </tr>
+        `;
+        table.appendChild(tfoot);
+    }
+
+    function getSlotUnlockLevel(slotNumber) {
+        if (slotNumber >= 1 && slotNumber <= 10) return 1;
+        if (slotNumber === 11) return 30;
+        if (slotNumber > 11 && slotNumber <= 17) return 30 + (slotNumber - 11) * 5;
+        return '-';
     }
 
     function renderJutsus(jutsuArray) {
@@ -594,10 +612,20 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 slotNumber = `<span class="text-yellow-400 font-semibold">${langStrings.slotExtra.replace('{num}', i - 17)}</span>`;
             }
+            const slotUnlockLevelNumber = getSlotUnlockLevel(i);
+            const slotUnlockLevelDisplay = slotUnlockLevelNumber !== '-' ? langStrings.unlockLevelText.replace('{level}', slotUnlockLevelNumber) : '-';
             const level = jutsu ? jutsu.level : '-';
             const name = jutsu ? getTranslated(jutsu, 'name') : `<i class="text-slate-500">${langStrings.slotEmpty}</i>`;
             const howToGet = jutsu ? getTranslated(jutsu, 'howToGet') : '-';
-            const row = `<tr class="hover:bg-slate-700/50"><td class="p-3 text-sm text-slate-200 font-bold">${slotNumber}</td><td class="p-3 text-sm text-slate-300">${level}</td><td class="p-3 text-sm text-slate-300">${name}</td><td class="p-3 text-sm text-slate-400">${howToGet}</td></tr>`;
+            const obs = jutsu ? getTranslated(jutsu, 'obs') : '-';
+            const row = `<tr class="hover:bg-slate-700/50">
+                            <td class="p-3 text-sm text-slate-200 font-bold">${slotNumber}</td>
+                            <td class="p-3 text-sm text-slate-300">${slotUnlockLevelDisplay}</td>
+                            <td class="p-3 text-sm text-slate-300">${level}</td>
+                            <td class="p-3 text-sm text-slate-300">${name}</td>
+                            <td class="p-3 text-sm text-slate-400">${howToGet}</td>
+                            <td class="p-3 text-sm text-slate-400">${obs}</td>
+                         </tr>`;
             jutsuTableBody.innerHTML += row;
         }
     }
@@ -635,68 +663,74 @@ document.addEventListener('DOMContentLoaded', () => {
         if (build.createdBy && build.createdBy.name) {
             document.getElementById('creator-name').textContent = build.createdBy.name;
             document.getElementById('creator-village').textContent = getTranslated(build.createdBy, 'village') || '-';
-            document.getElementById('creator-rank').textContent = getTranslated(build.createdBy, 'rank') || '-';
-            document.getElementById('creator-org').textContent = getTranslated(build.createdBy, 'org') || '-';
+            document.getElementById('build-version').textContent = build.version || '-';
+            document.getElementById('build-date').textContent = build.date || '-';
             createdBySection.classList.remove('hidden');
         } else {
             createdBySection.classList.add('hidden');
         }
-        
-        const buildInfoSection = document.getElementById('build-info-section');
-        if (build.version || build.date) {
-            document.getElementById('build-version').textContent = build.version || '-';
-            document.getElementById('build-date').textContent = build.date || '-';
-            buildInfoSection.classList.remove('hidden');
-        } else {
-            buildInfoSection.classList.add('hidden');
-        }
-
 
         statusOverview.classList.remove('hidden');
 
-
-        if (build.focuses && Object.keys(build.focuses).length > 1) {
+        // Focus Logic
+        const m1 = mastery1Select.value;
+        const m2 = mastery2Select.value;
+        const m1Focuses = masteryFocusMap[m1] || [];
+        const m2Focuses = masteryFocusMap[m2] || [];
+        const possibleFocuses = [...new Set([...m1Focuses, ...m2Focuses])];
+        
+        if (possibleFocuses.length > 1) {
             const currentFocusValue = focusSelect.value;
-            
             focusContainer.classList.remove('hidden');
             focusSelect.innerHTML = '';
-            const focusOptions = Object.keys(build.focuses);
-            focusOptions.forEach(focusName => {
+            
+            possibleFocuses.forEach(focusName => {
                 const option = document.createElement('option');
                 option.value = focusName;
                 const translationKey = `focus${focusName.charAt(0).toUpperCase() + focusName.slice(1)}`;
                 option.textContent = langStrings[translationKey] || focusName;
+                
+                if (!build.focuses[focusName]) {
+                    option.disabled = true;
+                }
+                
                 focusSelect.appendChild(option);
             });
 
             if (currentFocusValue && build.focuses[currentFocusValue]) {
                 focusSelect.value = currentFocusValue;
             } else {
-                focusSelect.value = focusOptions[0];
+                focusSelect.value = Object.keys(build.focuses)[0];
             }
             
-            const focusData = build.focuses[focusSelect.value];
+            currentFocusKey = focusSelect.value;
+            const focusData = build.focuses[currentFocusKey];
             renderAttributes(focusData.stats);
             renderJutsus(focusData.jutsuOrder);
+
         } else {
             focusContainer.classList.add('hidden');
-            const focusData = build.focuses[Object.keys(build.focuses)[0]];
+            currentFocusKey = Object.keys(build.focuses)[0];
+            const focusData = build.focuses[currentFocusKey];
             renderAttributes(focusData.stats);
             renderJutsus(focusData.jutsuOrder);
         }
 
         itemsTableBody.innerHTML = '';
-        for (const [category, itemData] of Object.entries(build.items)) {
-            const row = `<tr class="hover:bg-slate-700/50">
+        const itemCategories = ['Weapon', 'Clothing', 'Accessory'];
+        itemCategories.forEach(category => {
+            const itemData = build.items[category] || {};
+             const row = `<tr class="hover:bg-slate-700/50">
                             <td class="p-3 text-sm text-orange-400 font-semibold">${langStrings.itemTypes[category] || category}</td>
-                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'name')}</td>
-                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'dmg')}</td>
-                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'attr')}</td>
-                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'effect')}</td>
-                            <td class="p-3 text-sm text-slate-400">${getTranslated(itemData, 'obs')}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'name') || '-'}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'dmg') || '-'}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'attr') || '-'}</td>
+                            <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'effect') || '-'}</td>
+                            <td class="p-3 text-sm text-slate-400">${getTranslated(itemData, 'obs') || '-'}</td>
                         </tr>`;
             itemsTableBody.innerHTML += row;
-        }
+        });
+
 
         buildResultsDiv.classList.remove('hidden');
         buildResultsDiv.classList.add('fade-in');
