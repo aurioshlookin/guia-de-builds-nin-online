@@ -80,14 +80,20 @@
 
         <!-- Seção de Seleção de Maestrias -->
         <div class="bg-slate-900/50 p-6 rounded-lg mb-8 border border-slate-700">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div class="md-col-span-1">
                     <label for="mastery1" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery1Label">Maestria Principal</label>
-                    <select id="mastery1" class="w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                    <div class="flex items-center space-x-3">
+                        <select id="mastery1" class="flex-grow w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                        <img id="mastery1-img" src="" alt="Maestria Principal" class="w-10 h-10 rounded-md object-cover hidden">
+                    </div>
                 </div>
                 <div class="md:col-span-1">
                     <label for="mastery2" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery2Label">Maestria Secundária</label>
-                    <select id="mastery2" class="w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select" disabled></select>
+                     <div class="flex items-center space-x-3">
+                        <select id="mastery2" class="flex-grow w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select" disabled></select>
+                        <img id="mastery2-img" src="" alt="Maestria Secundária" class="w-10 h-10 rounded-md object-cover hidden">
+                    </div>
                 </div>
                 <div class="md:col-span-1">
                     <button id="find-build-btn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-colors h-10 disabled:bg-slate-600 disabled:cursor-not-allowed" data-translate-key="findBuildBtn">Buscar Build</button>
@@ -97,9 +103,9 @@
 
         <!-- Seção de Status da Build -->
         <div id="build-status-overview" class="hidden bg-slate-900/50 p-4 rounded-lg mb-6 border border-slate-700">
-            <div class="grid grid-cols-1 md:grid-cols-2 md:gap-x-8 gap-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 md:gap-x-4 gap-y-4 items-center">
                 <!-- Left Column: Build Status -->
-                <div>
+                <div class="md:col-span-1">
                     <h3 class="text-lg font-semibold text-slate-300 mb-3" data-translate-key="buildStatusTitle">Status da Build</h3>
                     <div class="space-y-2">
                         <div class="flex items-center">
@@ -116,8 +122,16 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Middle Column: Mastery Images -->
+                <div id="mastery-images-status" class="md:col-span-1 flex justify-center items-center space-x-2 order-first md:order-none hidden">
+                    <img id="status-m1-img" src="" alt="Maestria Principal" class="w-16 h-16 rounded-lg shadow-lg object-cover">
+                    <span id="plus-separator" class="text-3xl font-bold text-slate-500 hidden">+</span>
+                    <img id="status-m2-img" src="" alt="Maestria Secundária" class="w-16 h-16 rounded-lg shadow-lg object-cover hidden">
+                </div>
+
                 <!-- Right Column: Created By -->
-                <div id="created-by-section" class="hidden md:border-l md:border-slate-700 md:pl-8">
+                <div id="created-by-section" class="hidden md:col-span-1 md:border-l md:border-slate-700 md:pl-8">
                     <h3 class="text-lg font-semibold text-slate-300 mb-3" data-translate-key="createdByTitle">Criado por:</h3>
                     <div class="space-y-1 text-sm">
                         <div class="flex">
@@ -255,6 +269,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let isGuildBonusActive = true;
     let currentFocusKey;
 
+    const masteryImages = {
+        none: '',
+        fogo: 'images/fogo.png',
+        agua: 'images/agua.png',
+        terra: 'images/terra.png',
+        raio: 'images/raio.png',
+        vento: 'images/vento.png',
+        medico: 'images/medico.png',
+        arma: 'images/arma.png',
+        taijutsu: 'images/taijutsu.png',
+        bolha: 'images/bolha.png',
+        leque: 'images/leque.png',
+        punho_gentil: 'images/punho_gentil.png'
+    };
+
     // --- DADOS DAS BUILDS ---
     const buildData = {
     "fogo": {
@@ -338,6 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DA PÁGINA ---
     const mastery1Select = document.getElementById('mastery1');
     const mastery2Select = document.getElementById('mastery2');
+    const mastery1Img = document.getElementById('mastery1-img');
+    const mastery2Img = document.getElementById('mastery2-img');
     const findBuildBtn = document.getElementById('find-build-btn');
     const buildResultsDiv = document.getElementById('build-results');
     const feedbackMessageDiv = document.getElementById('feedback-message');
@@ -425,6 +456,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateMasteryAvailability();
         updateFindButtonState();
+        
+        // Update images based on initial selection
+        const m1Value = mastery1Select.value;
+        const m2Value = mastery2Select.value;
+        
+        mastery1Img.src = masteryImages[m1Value];
+        mastery1Img.classList.toggle('hidden', m1Value === 'none');
+        
+        mastery2Img.src = masteryImages[m2Value];
+        mastery2Img.classList.toggle('hidden', m2Value === 'none' || m1Value === 'none');
     }
     
     function getTranslated(obj, key) {
@@ -465,6 +506,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mastery1Select.addEventListener('change', () => {
         const selectedValue = mastery1Select.value;
+        mastery1Img.src = masteryImages[selectedValue];
+        mastery1Img.classList.toggle('hidden', selectedValue === 'none');
+
         mastery2Select.innerHTML = '';
         
         const masteryOptions = Object.keys(langStrings.masteryNames);
@@ -489,17 +533,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         mastery2Select.value = 'none';
+        mastery2Img.src = masteryImages['none'];
+        mastery2Img.classList.add('hidden');
+
         updateMasteryAvailability();
         updateFindButtonState();
     });
     
-    mastery2Select.addEventListener('change', updateFindButtonState);
+    mastery2Select.addEventListener('change', () => {
+        const selectedValue = mastery2Select.value;
+        mastery2Img.src = masteryImages[selectedValue];
+        mastery2Img.classList.toggle('hidden', selectedValue === 'none');
+        updateFindButtonState();
+    });
 
     findBuildBtn.addEventListener('click', () => {
         const m1 = mastery1Select.value;
         const m2 = mastery2Select.value;
         buildResultsDiv.classList.add('hidden');
         feedbackMessageDiv.classList.add('hidden');
+        document.getElementById('mastery-images-status').classList.add('hidden');
         
         if (m1 === 'none') {
             showFeedback(langStrings.feedbackSelectMastery);
@@ -650,6 +703,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const attrBadge = document.getElementById('status-attributes-badge');
         const jutsuBadge = document.getElementById('status-jutsus-badge');
         const itemsBadge = document.getElementById('status-items-badge');
+
+        const masteryImagesStatus = document.getElementById('mastery-images-status');
+        const statusM1Img = document.getElementById('status-m1-img');
+        const statusM2Img = document.getElementById('status-m2-img');
+        const plusSeparator = document.getElementById('plus-separator');
+
+        masteryImagesStatus.classList.remove('hidden');
+        const m1 = mastery1Select.value;
+        const m2 = mastery2Select.value;
+        statusM1Img.src = masteryImages[m1] || masteryImages['none'];
+        statusM2Img.src = masteryImages[m2] || masteryImages['none'];
+        statusM2Img.classList.toggle('hidden', m2 === 'none');
+        plusSeparator.classList.toggle('hidden', m2 === 'none');
         
         const focusDataForStatus = build.focuses[Object.keys(build.focuses)[0]];
         const areAttributesOk = focusDataForStatus && focusDataForStatus.stats && focusDataForStatus.stats.length > 1;
@@ -673,8 +739,6 @@ document.addEventListener('DOMContentLoaded', () => {
         statusOverview.classList.remove('hidden');
 
         // Focus Logic
-        const m1 = mastery1Select.value;
-        const m2 = mastery2Select.value;
         const m1Focuses = masteryFocusMap[m1] || [];
         const m2Focuses = masteryFocusMap[m2] || [];
         const possibleFocuses = [...new Set([...m1Focuses, ...m2Focuses])];
@@ -766,4 +830,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
+
+
 
