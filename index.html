@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR"> <!-- A classe 'dark' será aplicada aqui -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nin Online - Guia de Builds</title>
     <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- 1. CARREGA O TAILWIND PRIMEIRO -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. CONFIGURA O TAILWIND DEPOIS QUE ELE EXISTE (CORRIGIDO) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Habilita o dark mode baseado em classe (ex: <html class="dark">)
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // Define 'Inter' como a fonte padrão
+                    },
+                }
+            }
+        }
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e5e7eb; /* bg-gray-200 */
-            color: #e5e7eb; /* text-gray-200 */
+            /* @apply bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-gray-200 transition-colors duration-200; */ /* <- REMOVIDO POIS O CDN DO TAILWIND NÃO SUPORTA @APPLY AQUI */
         }
         .custom-select {
             appearance: none;
             -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
             background-position: right 0.5rem center;
             background-repeat: no-repeat;
             background-size: 1.5em 1.5em;
@@ -31,7 +47,7 @@
             cursor: not-allowed;
         }
         option:disabled {
-            color: #6b7280;
+            color: #9ca3af;
         }
         /* Animação de fade-in */
         @keyframes fadeIn {
@@ -41,83 +57,86 @@
         .fade-in {
             animation: fadeIn 0.5s ease-in-out forwards;
         }
-        /* Custom scrollbar for Jutsu list */
-        .jutsu-scroll::-webkit-scrollbar {
-            width: 8px;
-        }
-        .jutsu-scroll::-webkit-scrollbar-track {
-            background-color: #334155; /* slate-700 */
-            border-radius: 10px;
-        }
-        .jutsu-scroll::-webkit-scrollbar-thumb {
-            background-color: #64748b; /* slate-500 */
-            border-radius: 10px;
-        }
-        .jutsu-scroll::-webkit-scrollbar-thumb:hover {
-            background-color: #94a3b8; /* slate-400 */
-        }
         .lang-btn.active {
-            background-color: #ea580c; /* orange-600 */
-            color: #ffffff;
+            background-color: #f97316 !important; /* Cor do bg-orange-500 */
+            color: #ffffff !important; /* Cor do text-white */
         }
+        /* Removida a regra .dark .lang-btn.active que estava incompleta */
     </style>
+    <script>
+        // Aplica o tema salvo antes mesmo da página carregar para evitar FOUC (Flash of Unstyled Content)
+        if (localStorage.getItem('ninBuildsTheme') === 'dark' || (!('ninBuildsTheme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4 pt-8">
+<body class="min-h-screen flex flex-col items-center p-4 pt-8 bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-gray-200 transition-colors duration-200">
 
-    <div class="w-full max-w-5xl bg-slate-800 rounded-2xl shadow-lg p-6 md:p-8 relative">
-        <!-- Language Switcher -->
-        <div class="absolute top-4 right-6 flex items-center space-x-2 text-sm">
-            <button data-lang="pt-BR" class="lang-btn px-2 py-1 rounded font-semibold transition-colors">PT-BR</button>
-            <span class="text-slate-600">|</span>
-            <button data-lang="en" class="lang-btn px-2 py-1 rounded font-semibold transition-colors">EN</button>
+    <div class="w-full max-w-5xl bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 md:p-8 relative">
+        <!-- Language Switcher & Theme Toggle -->
+        <div class="absolute top-4 right-6 flex items-center space-x-3 text-sm">
+            <!-- Language -->
+            <div class="flex items-center space-x-2">
+                <button data-lang="pt-BR" class="lang-btn px-2 py-1 rounded font-semibold text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-700 transition-colors">PT-BR</button>
+                <span class="text-gray-300 dark:text-slate-600">|</span>
+                <button data-lang="en" class="lang-btn px-2 py-1 rounded font-semibold text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-700 transition-colors">EN</button>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="p-2 rounded-full text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-700 transition-colors focus:outline-none">
+                <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
 
         <!-- Cabeçalho -->
         <header class="text-center mb-8 pt-8 md:pt-0">
-            <h1 class="text-3xl md:text-4xl font-bold text-orange-400" data-translate-key="headerTitle">Guia de Builds - Nin Online</h1>
-            <p class="text-slate-400 mt-2" data-translate-key="headerSubtitle">Encontre a build recomendada para sua combinação de maestrias.</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-orange-500 dark:text-orange-400" data-translate-key="headerTitle">Guia de Builds - Nin Online</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2" data-translate-key="headerSubtitle">Encontre a build recomendada para sua combinação de maestrias.</p>
         </header>
 
         <!-- Seção de Seleção de Maestrias -->
-        <div class="bg-slate-900/50 p-6 rounded-lg mb-8 border border-slate-700">
+        <div class="bg-gray-50 dark:bg-slate-900/50 p-6 rounded-lg mb-8 border border-gray-200 dark:border-slate-700">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div class="md-col-span-1">
-                    <label for="mastery1" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery1Label">Maestria Principal</label>
+                    <label for="mastery1" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2" data-translate-key="mastery1Label">Maestria Principal</label>
                     <div class="flex items-center space-x-3">
-                        <select id="mastery1" class="flex-grow w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                        <select id="mastery1" class="flex-grow w-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 dark:text-slate-200 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
                         <img id="mastery1-img" src="" alt="Maestria Principal" class="w-10 h-10 rounded-md object-cover hidden">
                     </div>
                 </div>
                 <div class="md:col-span-1">
-                    <label for="mastery2" class="block text-sm font-medium text-slate-300 mb-2" data-translate-key="mastery2Label">Maestria Secundária</label>
+                    <label for="mastery2" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2" data-translate-key="mastery2Label">Maestria Secundária</label>
                      <div class="flex items-center space-x-3">
-                        <select id="mastery2" class="flex-grow w-full bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select" disabled></select>
+                        <select id="mastery2" class="flex-grow w-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 dark:text-slate-200 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select" disabled></select>
                         <img id="mastery2-img" src="" alt="Maestria Secundária" class="w-10 h-10 rounded-md object-cover hidden">
                     </div>
                 </div>
                 <div class="md:col-span-1">
-                    <button id="find-build-btn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition-colors h-10 disabled:bg-slate-600 disabled:cursor-not-allowed" data-translate-key="findBuildBtn">Buscar Build</button>
+                    <button id="find-build-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors h-10 disabled:bg-gray-300 dark:disabled:bg-slate-600 disabled:cursor-not-allowed" data-translate-key="findBuildBtn">Buscar Build</button>
                 </div>
             </div>
         </div>
-
+        
         <!-- Seção de Status da Build -->
-        <div id="build-status-overview" class="hidden bg-slate-900/50 p-4 rounded-lg mb-6 border border-slate-700">
+        <div id="build-status-overview" class="hidden bg-gray-50 dark:bg-slate-900/50 p-4 rounded-lg mb-6 border border-gray-200 dark:border-slate-700">
             <div class="grid grid-cols-1 md:grid-cols-3 md:gap-x-4 gap-y-4 items-center">
                 <!-- Left Column: Build Status -->
                 <div class="md:col-span-1">
-                    <h3 class="text-lg font-semibold text-slate-300 mb-3" data-translate-key="buildStatusTitle">Status da Build</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-3" data-translate-key="buildStatusTitle">Status da Build</h3>
                     <div class="space-y-2">
                         <div class="flex items-center">
-                            <span class="font-medium text-slate-400 mr-2 w-20" data-translate-key="statusAttributes">Atributos:</span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 mr-2 w-20" data-translate-key="statusAttributes">Atributos:</span>
                             <span id="status-attributes-badge" class="px-2 py-0.5 text-xs font-bold rounded-full"></span>
                         </div>
                         <div class="flex items-center">
-                            <span class="font-medium text-slate-400 mr-2 w-20" data-translate-key="statusJutsus">Jutsus:</span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 mr-2 w-20" data-translate-key="statusJutsus">Jutsus:</span>
                             <span id="status-jutsus-badge" class="px-2 py-0.5 text-xs font-bold rounded-full"></span>
                         </div>
                         <div class="flex items-center">
-                            <span class="font-medium text-slate-400 mr-2 w-20" data-translate-key="statusItems">Itens:</span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 mr-2 w-20" data-translate-key="statusItems">Itens:</span>
                             <span id="status-items-badge" class="px-2 py-0.5 text-xs font-bold rounded-full"></span>
                         </div>
                     </div>
@@ -126,29 +145,29 @@
                 <!-- Middle Column: Mastery Images -->
                 <div id="mastery-images-status" class="md:col-span-1 flex justify-center items-center space-x-2 order-first md:order-none hidden">
                     <img id="status-m1-img" src="" alt="Maestria Principal" class="w-16 h-16 rounded-lg shadow-lg object-cover">
-                    <span id="plus-separator" class="text-3xl font-bold text-slate-500 hidden">+</span>
+                    <span id="plus-separator" class="text-3xl font-bold text-gray-400 dark:text-slate-500 hidden">+</span>
                     <img id="status-m2-img" src="" alt="Maestria Secundária" class="w-16 h-16 rounded-lg shadow-lg object-cover hidden">
                 </div>
 
                 <!-- Right Column: Created By -->
-                <div id="created-by-section" class="hidden md:col-span-1 md:border-l md:border-slate-700 md:pl-8">
-                    <h3 class="text-lg font-semibold text-slate-300 mb-3" data-translate-key="createdByTitle">Criado por:</h3>
+                <div id="created-by-section" class="hidden md:col-span-1 md:border-l md:border-gray-200 dark:md:border-slate-700 md:pl-8">
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-slate-300 mb-3" data-translate-key="createdByTitle">Criado por:</h3>
                     <div class="space-y-1 text-sm">
                         <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="creatorNameLabel">Nome:</span>
-                            <span id="creator-name" class="font-bold text-orange-400"></span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 w-24" data-translate-key="creatorNameLabel">Nome:</span>
+                            <span id="creator-name" class="font-bold text-orange-600 dark:text-orange-400"></span>
                         </div>
                          <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="creatorVillageLabel">Vila:</span>
-                            <span id="creator-village" class="text-slate-300"></span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 w-24" data-translate-key="creatorVillageLabel">Vila:</span>
+                            <span id="creator-village" class="text-gray-700 dark:text-slate-300"></span>
                         </div>
                         <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="buildVersionLabel">Versão:</span>
-                            <span id="build-version" class="text-slate-300"></span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 w-24" data-translate-key="buildVersionLabel">Versão:</span>
+                            <span id="build-version" class="text-gray-700 dark:text-slate-300"></span>
                         </div>
                          <div class="flex">
-                            <span class="font-medium text-slate-400 w-24" data-translate-key="buildDateLabel">Data:</span>
-                            <span id="build-date" class="text-slate-300"></span>
+                            <span class="font-medium text-gray-500 dark:text-slate-400 w-24" data-translate-key="buildDateLabel">Data:</span>
+                            <span id="build-date" class="text-gray-700 dark:text-slate-300"></span>
                         </div>
                     </div>
                 </div>
@@ -160,36 +179,36 @@
         <div id="build-results" class="hidden space-y-8">
             <!-- 1. Atributos por Nível -->
             <section id="attributes-section">
-                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="attributesTitle">Atributos Recomendados</h2>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="attributesTitle">Atributos Recomendados</h2>
                 
                 <div class="flex flex-wrap items-center justify-between mb-4">
                     <div id="attribute-focus-container" class="hidden items-center">
-                        <label for="attribute-focus-select" class="text-sm font-medium text-slate-300 mr-4" data-translate-key="focusLabel">Foco da Build:</label>
-                        <select id="attribute-focus-select" class="w-52 bg-slate-700 border border-slate-600 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
+                        <label for="attribute-focus-select" class="text-sm font-medium text-gray-700 dark:text-slate-300 mr-4" data-translate-key="focusLabel">Foco da Build:</label>
+                        <select id="attribute-focus-select" class="w-52 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 dark:text-slate-200 rounded-md p-2 focus:ring-orange-500 focus:border-orange-500 custom-select"></select>
                     </div>
                     <div class="flex items-center space-x-2 mt-2 md:mt-0" id="guild-bonus-container" class="hidden">
-                         <input type="checkbox" id="guild-bonus-toggle" class="h-4 w-4 rounded bg-slate-700 border-slate-600 text-orange-600 focus:ring-orange-500" checked>
-                        <label for="guild-bonus-toggle" id="guild-bonus-legend" class="text-sm text-orange-400 cursor-pointer">
+                         <input type="checkbox" id="guild-bonus-toggle" class="h-4 w-4 rounded border-gray-300 dark:bg-slate-700 dark:border-slate-600 text-orange-500 dark:text-orange-600 focus:ring-orange-500" checked>
+                        <label for="guild-bonus-toggle" id="guild-bonus-legend" class="text-sm text-orange-600 dark:text-orange-400 cursor-pointer">
                             <span data-translate-key="guildBonusLegend"></span>
                         </label>
                     </div>
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full bg-slate-900/50 rounded-lg text-center">
-                        <thead class="bg-slate-700">
+                    <table class="w-full bg-white dark:bg-slate-900/50 rounded-lg shadow-sm text-center border border-gray-200 dark:border-slate-700">
+                        <thead class="bg-gray-100 dark:bg-slate-700">
                             <tr>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thLevel">Nível</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thStrength">Força</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thFortitude">Fortitude</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thIntellect">Intelecto</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thAgility">Agilidade</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thChakra">Chakra</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thHealth">Vida</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-slate-300" data-translate-key="thChakraPool">Chakra</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thLevel">Nível</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thStrength">Força</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thFortitude">Fortitude</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thIntellect">Intelecto</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thAgility">Agilidade</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thChakra">Chakra</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thHealth">Vida</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-gray-600 dark:text-slate-300" data-translate-key="thChakraPool">Chakra</th>
                             </tr>
                         </thead>
-                        <tbody id="attributes-table-body" class="divide-y divide-slate-700"></tbody>
+                        <tbody id="attributes-table-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody>
                         
                     </table>
                 </div>
@@ -197,21 +216,21 @@
 
             <!-- 2. Ordem dos Jutsus -->
             <section id="jutsu-section">
-                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="jutsuTitle">Ordem de Jutsus Sugerida</h2>
-                <div class="bg-slate-900/50 rounded-lg overflow-hidden">
-                    <div class="max-h-96 overflow-y-auto jutsu-scroll">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="jutsuTitle">Ordem de Jutsus Sugerida</h2>
+                <div class="bg-white dark:bg-slate-900/50 rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700">
+                    <div class="max-h-96 overflow-y-auto">
                         <table class="min-w-full">
-                            <thead class="bg-slate-700 sticky top-0">
+                            <thead class="bg-gray-100 dark:bg-slate-700 sticky top-0">
                                 <tr>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thSlot">Slot</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thSlotLevel">Nível do Slot</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thLevel">Nível</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thJutsu">Jutsu</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thHowToGet">Como Obter</th>
-                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thObservationJutsu">Observação</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thSlot">Slot</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thSlotLevel">Nível do Slot</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thLevel">Nível</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thJutsu">Jutsu</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thHowToGet">Como Obter</th>
+                                    <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thObservationJutsu">Observação</th>
                                 </tr>
                             </thead>
-                            <tbody id="jutsu-table-body" class="divide-y divide-slate-700"></tbody>
+                            <tbody id="jutsu-table-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -219,29 +238,29 @@
 
             <!-- 3. Itens Recomendados -->
             <section id="items-section">
-                <h2 class="text-2xl font-bold text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="itemsTitle">Itens Recomendados</h2>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-slate-200 mb-4 border-b-2 border-orange-500 pb-2" data-translate-key="itemsTitle">Itens Recomendados</h2>
                 <div class="overflow-x-auto">
-                     <table class="min-w-full bg-slate-900/50 rounded-lg">
-                        <thead class="bg-slate-700">
+                     <table class="min-w-full bg-white dark:bg-slate-900/50 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
+                        <thead class="bg-gray-100 dark:bg-slate-700">
                             <tr>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thType">Tipo</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thRecommendedItem">Item Recomendado</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thDamage">Dano</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thAttribute">Atributo</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thEffect">Efeito</th>
-                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-slate-300" data-translate-key="thObservation">Observação</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thType">Tipo</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thRecommendedItem">Item Recomendado</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thDamage">Dano</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thAttribute">Atributo</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thEffect">Efeito</th>
+                                <th class="p-3 text-sm font-semibold tracking-wide text-left text-gray-600 dark:text-slate-300" data-translate-key="thObservation">Observação</th>
                             </tr>
                         </thead>
-                        <tbody id="items-table-body" class="divide-y divide-slate-700"></tbody>
+                        <tbody id="items-table-body" class="divide-y divide-gray-200 dark:divide-slate-700"></tbody>
                     </table>
                 </div>
             </section>
         </div>
 
-        <div id="feedback-message" class="hidden text-center p-6 bg-yellow-900/40 text-yellow-300 rounded-lg mt-8 border border-yellow-800"></div>
+        <div id="feedback-message" class="hidden text-center p-6 bg-red-50 dark:bg-yellow-900/40 text-red-700 dark:text-yellow-300 rounded-lg mt-8 border border-red-200 dark:border-yellow-800"></div>
     </div>
 
-    <footer class="w-full max-w-5xl text-center text-xs text-slate-500 mt-6 pb-6 space-y-2">
+    <footer class="w-full max-w-5xl text-center text-xs text-gray-500 dark:text-slate-500 mt-6 pb-6 space-y-2">
         <p data-translate-key="footerDisclaimer">Este é um projeto de fã não oficial e não é afiliado ao Nin Online. Todos os recursos visuais e nomes de jutsus/itens são propriedade de seus respectivos criadores.</p>
         <p>
             <span data-translate-key="footerCreatedBy">Site desenvolvido por Auriosh. </span>
@@ -250,8 +269,8 @@
          <p data-translate-key="footerAcknowledgements">Agradecimentos especiais a todos os jogadores que contribuem com builds para a comunidade.</p>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+    <script>
+//REMOVIDO o wrapper 'DOMContentLoaded' daqui
     // --- LÓGICA DE TRADUÇÃO ---
     const translations = {
         'pt-BR': {
@@ -1572,7 +1591,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const focusSelect = document.getElementById('attribute-focus-select');
     const guildBonusToggle = document.getElementById('guild-bonus-toggle');
     const masteryFocusMap = {fogo:['intellect'],agua:['intellect'],terra:['intellect'],raio:['intellect'],vento:['intellect'],medico:['intellect','chakra'],arma:['strength','intellect'],taijutsu:['agility'],bolha:['strength'],leque:['strength'],punho_gentil:['strength']};
-
+    
+    // --- LÓGICA DO TEMA --- (MOVIDO DAQUI)
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -1803,26 +1823,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const health = 250 + (staWithBonus - 5) * 8;
             const chakraPool = 50 + (chakraWithBonus - 5) * 5;
 
-            const strBonusDisplay = isGuildBonusActive && strBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${strBonus})</span>` : '';
-            const staBonusDisplay = isGuildBonusActive ? ` <span class="text-orange-400 text-xs font-normal">(+${staBonus})</span>` : '';
-            const intelBonusDisplay = isGuildBonusActive && intelBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${intelBonus})</span>` : '';
-            const agiBonusDisplay = isGuildBonusActive && agiBonus > 0 ? ` <span class="text-orange-400 text-xs font-normal">(+${agiBonus})</span>` : '';
-            const chakraBonusDisplay = isGuildBonusActive ? ` <span class="text-orange-400 text-xs font-normal">(+${chakraBonus})</span>` : '';
+            const strBonusDisplay = isGuildBonusActive && strBonus > 0 ? ` <span class="text-orange-500 dark:text-orange-400 text-xs font-normal">(+${strBonus})</span>` : '';
+            const staBonusDisplay = isGuildBonusActive ? ` <span class="text-orange-500 dark:text-orange-400 text-xs font-normal">(+${staBonus})</span>` : '';
+            const intelBonusDisplay = isGuildBonusActive && intelBonus > 0 ? ` <span class="text-orange-500 dark:text-orange-400 text-xs font-normal">(+${intelBonus})</span>` : '';
+            const agiBonusDisplay = isGuildBonusActive && agiBonus > 0 ? ` <span class="text-orange-500 dark:text-orange-400 text-xs font-normal">(+${agiBonus})</span>` : '';
+            const chakraBonusDisplay = isGuildBonusActive ? ` <span class="text-orange-500 dark:text-orange-400 text-xs font-normal">(+${chakraBonus})</span>` : '';
 
             const isSuggestion = stat.level === 60;
-            const rowClass = isSuggestion ? 'bg-slate-800/60' : '';
-            const levelDisplay = isSuggestion ? `${stat.level} <span class="text-xs text-yellow-400 font-normal">${langStrings.level60Suggestion}</span>` : stat.level;
+            const rowClass = isSuggestion ? 'bg-gray-50/50 dark:bg-slate-800/60' : 'bg-white dark:bg-transparent';
+            const levelDisplay = isSuggestion ? `${stat.level} <span class="text-xs text-yellow-600 dark:text-yellow-400 font-normal">${langStrings.level60Suggestion}</span>` : stat.level;
 
 
             const row = `<tr class="${rowClass}">
-                <td class="p-2 text-sm text-slate-300 font-bold text-left">${levelDisplay}</td>
-                <td class="p-2 text-sm text-slate-300">${stat.str}${strBonusDisplay}</td>
-                <td class="p-2 text-sm text-slate-300">${stat.sta}${staBonusDisplay}</td>
-                <td class="p-2 text-sm text-slate-300">${stat.intel}${intelBonusDisplay}</td>
-                <td class="p-2 text-sm text-slate-300">${stat.agi}${agiBonusDisplay}</td>
-                <td class="p-2 text-sm text-slate-300">${stat.chakra}${chakraBonusDisplay}</td>
-                <td class="p-2 text-sm text-slate-300 font-semibold text-green-400">${health}</td>
-                <td class="p-2 text-sm text-slate-300 font-semibold text-blue-400">${chakraPool}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300 font-bold text-left">${levelDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300">${stat.str}${strBonusDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300">${stat.sta}${staBonusDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300">${stat.intel}${intelBonusDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300">${stat.agi}${agiBonusDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 dark:text-slate-300">${stat.chakra}${chakraBonusDisplay}</td>
+                <td class="p-2 text-sm text-gray-700 font-semibold text-green-600 dark:text-green-400">${health}</td>
+                <td class="p-2 text-sm text-gray-700 font-semibold text-blue-600 dark:text-blue-400">${chakraPool}</td>
             </tr>`;
             attributesTableBody.innerHTML += row;
         });
@@ -1830,8 +1850,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Adiciona a nota de rodapé sobre a flexibilidade dos status
         tfoot = document.createElement('tfoot');
         tfoot.innerHTML = `
-            <tr class="bg-slate-900/50">
-                <td colspan="8" class="p-3 text-xs text-slate-400 text-center italic border-t-2 border-slate-700" data-translate-key="level50FreedomNote">
+            <tr class="bg-gray-50 dark:bg-slate-900/50">
+                <td colspan="8" class="p-3 text-xs text-gray-500 dark:text-slate-400 text-center italic border-t-2 border-gray-200 dark:border-slate-700" data-translate-key="level50FreedomNote">
                     ${langStrings.level50FreedomNote}
                 </td>
             </tr>
@@ -1854,21 +1874,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i <= 17) {
                 slotNumber = i;
             } else {
-                slotNumber = `<span class="text-yellow-400 font-semibold">${langStrings.slotExtra.replace('{num}', i - 17)}</span>`;
+                slotNumber = `<span class="text-yellow-600 dark:text-yellow-400 font-semibold">${langStrings.slotExtra.replace('{num}', i - 17)}</span>`;
             }
             const slotUnlockLevelNumber = getSlotUnlockLevel(i);
             const slotUnlockLevelDisplay = slotUnlockLevelNumber !== '-' ? langStrings.unlockLevelText.replace('{level}', slotUnlockLevelNumber) : '-';
             const level = jutsu ? jutsu.level : '-';
-            const name = jutsu ? getTranslated(jutsu, 'name') : `<i class="text-slate-500">${langStrings.slotEmpty}</i>`;
+            const name = jutsu ? getTranslated(jutsu, 'name') : `<i class="text-gray-400 dark:text-slate-500">${langStrings.slotEmpty}</i>`;
             const howToGet = jutsu ? getTranslated(jutsu, 'howToGet') : '-';
             const obs = jutsu ? getTranslated(jutsu, 'obs') : '-';
-            const row = `<tr class="hover:bg-slate-700/50">
-                            <td class="p-3 text-sm text-slate-200 font-bold">${slotNumber}</td>
-                            <td class="p-3 text-sm text-slate-300">${slotUnlockLevelDisplay}</td>
-                            <td class="p-3 text-sm text-slate-300">${level}</td>
-                            <td class="p-3 text-sm text-slate-300">${name}</td>
-                            <td class="p-3 text-sm text-slate-400">${howToGet}</td>
-                            <td class="p-3 text-sm text-slate-400">${obs}</td>
+            const row = `<tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50">
+                            <td class="p-3 text-sm text-gray-700 dark:text-slate-200 font-bold">${slotNumber}</td>
+                            <td class="p-3 text-sm text-gray-600 dark:text-slate-300">${slotUnlockLevelDisplay}</td>
+                            <td class="p-3 text-sm text-gray-600 dark:text-slate-300">${level}</td>
+                            <td class="p-3 text-sm text-gray-800 dark:text-slate-300">${name}</td>
+                            <td class="p-3 text-sm text-gray-500 dark:text-slate-400">${howToGet}</td>
+                            <td class="p-3 text-sm text-gray-500 dark:text-slate-400">${obs}</td>
                          </tr>`;
             jutsuTableBody.innerHTML += row;
         }
@@ -1877,10 +1897,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateBadge(badgeElement, isOk) {
         if (isOk) {
             badgeElement.textContent = langStrings.statusOk;
-            badgeElement.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-green-600 text-white';
+            badgeElement.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-green-500 dark:bg-green-600 text-white';
         } else {
             badgeElement.textContent = langStrings.statusPending;
-            badgeElement.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-yellow-500 text-slate-900';
+            badgeElement.className = 'px-2 py-0.5 text-xs font-bold rounded-full bg-yellow-400 dark:bg-yellow-500 text-yellow-900 dark:text-slate-900';
         }
     }
 
@@ -1974,19 +1994,19 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsTableBody.innerHTML = '';
         if (build.items && build.items.length > 0) {
             build.items.forEach(itemData => {
-                 const row = `<tr class="hover:bg-slate-700/50">
-                                <td class="p-3 text-sm text-orange-400 font-semibold">${getTranslated(langStrings.itemTypes, itemData.type) || itemData.type}</td>
-                                <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'name') || '-'}</td>
-                                <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'dmg') || '-'}</td>
-                                <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'attr') || '-'}</td>
-                                <td class="p-3 text-sm text-slate-300">${getTranslated(itemData, 'effect') || '-'}</td>
-                                <td class="p-3 text-sm text-slate-400">${getTranslated(itemData, 'obs') || '-'}</td>
+                 const row = `<tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50">
+                                <td class="p-3 text-sm text-orange-600 dark:text-orange-400 font-semibold">${getTranslated(langStrings.itemTypes, itemData.type) || itemData.type}</td>
+                                <td class="p-3 text-sm text-gray-800 dark:text-slate-300">${getTranslated(itemData, 'name') || '-'}</td>
+                                <td class="p-3 text-sm text-gray-700 dark:text-slate-300">${getTranslated(itemData, 'dmg') || '-'}</td>
+                                <td class="p-3 text-sm text-gray-700 dark:text-slate-300">${getTranslated(itemData, 'attr') || '-'}</td>
+                                <td class="p-3 text-sm text-gray-700 dark:text-slate-300">${getTranslated(itemData, 'effect') || '-'}</td>
+                                <td class="p-3 text-sm text-gray-500 dark:text-slate-400">${getTranslated(itemData, 'obs') || '-'}</td>
                             </tr>`;
                 itemsTableBody.innerHTML += row;
             });
         } else {
             // Opcional: Mostrar uma linha indicando que não há itens, se preferir
-            itemsTableBody.innerHTML = `<tr><td colspan="6" class="p-3 text-sm text-slate-500 text-center">Nenhum item recomendado para esta build.</td></tr>`;
+            itemsTableBody.innerHTML = `<tr><td colspan="6" class="p-3 text-sm text-gray-500 dark:text-slate-500 text-center">Nenhum item recomendado para esta build.</td></tr>`;
         }
 
 
@@ -2019,10 +2039,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     setLanguage(getInitialLanguage());
-});
+
+    // --- LÓGICA DO TEMA --- (COLADO AQUI)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-icon-light');
+    const darkIcon = document.getElementById('theme-icon-dark');
+
+    // Função para atualizar o ícone
+    function updateThemeIcon() {
+        if (document.documentElement.classList.contains('dark')) {
+            // Se o tema for ESCURO, mostre o ícone de SOL (para ir para o claro)
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        } else {
+            // Se o tema for CLARO, mostre o ícone de LUA (para ir para o escuro)
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        }
+    }
+
+    // Event listener para o botão
+    themeToggleBtn.addEventListener('click', () => {
+        // Alterna a classe 'dark'
+        document.documentElement.classList.toggle('dark');
+        
+        // Salva a preferência
+        if (document.documentElement.classList.contains('dark')) {
+            localStorage.setItem('ninBuildsTheme', 'dark');
+        } else {
+            localStorage.setItem('ninBuildsTheme', 'light');
+        }
+        
+        // Atualiza o ícone
+        updateThemeIcon();
+    });
+
+    // Atualiza o ícone no carregamento inicial
+    updateThemeIcon();
+    // --- FIM DA LÓGICA DO TEMA ---
+
 </script>
 
 </body>
 </html>
-
 
